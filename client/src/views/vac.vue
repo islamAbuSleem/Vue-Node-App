@@ -57,7 +57,7 @@
                     <v-col cols="3" class="ml-auto">
                         <v-menu :close-on-content-click="true" transition="scale-transition" offset-y max-width="290px" min-width="290px">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-text-field v-model="dayOff.returnDate" label="تاريخ العوده" persistent-hint prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" :picker-date.sync="getPeriod" reverse></v-text-field>
+                                <v-text-field v-model="dayOff.returnDate" label="تاريخ العوده" persistent-hint prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" reverse></v-text-field>
                             </template>
 
                             <v-date-picker v-model="dayOff.returnDate" no-title></v-date-picker>
@@ -134,10 +134,8 @@ export default {
 
         let x = new Date(this.dayOff.returnDate);
         x.getDay();
-        console.log(this.days[x.getDay()]);
         this.dayOff.returnDay = this.days[x.getDay()];
 
-        console.log(this.dayOff);
     },
     updated() {
 
@@ -145,8 +143,6 @@ export default {
     created() {
         this.dayOff.userId = this.userInfo.userId;
         this.dayOff.dept = this.userInfo.dept;
-        console.log(this.dayOff.userId);
-        console.log(this.dayOff.dept);
     },
     computed: {
         ...mapGetters(["userInfo", "datOff", "response"]),

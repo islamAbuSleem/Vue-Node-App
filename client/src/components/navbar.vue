@@ -14,10 +14,18 @@
             </v-list-item>
             <v-row justify="center">
                 <v-expansion-panels accordion>
-                    <v-expansion-panel class="blue-grey lighten-3" v-for="link in links" :key="link.text">
-                        <v-expansion-panel-header class="expansion__header grey--text text--darken-2 font-weight-bold">{{link.text}}</v-expansion-panel-header>
+                    <v-expansion-panel class="blue-grey lighten-3" >
+                        <v-expansion-panel-header class="expansion__header grey--text text--darken-2 font-weight-bold">اجازات</v-expansion-panel-header>
                         <v-expansion-panel-content class="text-right blue-grey lighten-4 ">
-                            <router-link v-for="(val,index) in link.types" :key="index" :to="{name:val.name}" class="internal__links blue-grey--text text--darken-1 font-weight-bold">{{val.text}}</router-link>
+                            <router-link :to="{name:'user',params:{name:userInfo.name}}" class="internal__links blue-grey--text text--darken-1 font-weight-bold">الرصيد</router-link>
+                            <router-link :to="{name:'needVac'}" class="internal__links blue-grey--text text--darken-1 font-weight-bold">طلب اجازه</router-link>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                    <v-expansion-panel class="blue-grey lighten-3" >
+                        <v-expansion-panel-header class="expansion__header grey--text text--darken-2 font-weight-bold">اذن</v-expansion-panel-header>
+                        <v-expansion-panel-content class="text-right blue-grey lighten-4 ">
+                            <router-link :to="{name:'ezen'}" class="internal__links blue-grey--text text--darken-1 font-weight-bold">اذن انصراف</router-link>
+                            <router-link :to="{name:'duty'}" class="internal__links blue-grey--text text--darken-1 font-weight-bold">اذن ماموريه</router-link>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
@@ -27,11 +35,12 @@
     </v-navigation-drawer>
 
     <v-app-bar app clipped flat>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+        <a class="internal__links blue-grey--text text--darken-1 font-weight-bold ml-3" @click="logout">Logout</a>
         <v-toolbar-title class="grey--text toolbar__title m-auto">
             <span class="font-weight-light text-capitalize">Workflow</span>
             <span class="text-capitalize">System</span>
         </v-toolbar-title>
+
 
         <v-btn icon>
             <v-icon></v-icon>
@@ -40,41 +49,27 @@
         <v-btn icon class="mr-5">
             <v-icon></v-icon>
         </v-btn>
+                        <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="ml-auto"/>
+
     </v-app-bar>
 </nav>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
-    props: {
-        source: String
-    },
     data: () => ({
         drawer: true,
-        links: [{
-                text: "اجازات",
-                route: "/",
-                types: [{
-                    text: "عرض الاجازات",
-                    name: "viewVac"
-                }, {
-                    text: "طلب اجازه",
-                    name: "needVac"
-                }]
-            },
-            {
-                text: "اذن",
-                route: "/experience",
-                types: [{
-                    text: "اذن انصراف",
-                    name: "ezen"
-                }, {
-                    text: "ماموريه",
-                    name: "duty"
-                }, ]
-            },
-        ]
-    })
+       
+    }),computed: {
+        ...mapGetters(["userInfo"])
+    },
+    methods: {
+        ...mapActions(["logout"]),
+       
+    },
+     
 };
 
 // this.$vuetify.theme.dark = true
