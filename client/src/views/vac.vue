@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import authService from '../services/dayOffoperations'
 import {
     mapGetters
 } from "vuex";
@@ -136,15 +137,23 @@ export default {
         x.getDay();
         this.dayOff.returnDay = this.days[x.getDay()];
         
-        if(dayOff.offType == this.items[2] ){
-            this.userInfo.normal--
-        }
-        if(dayOff.offType == this.items[1] ){
-            this.userInfo.urgent--
-        }
+        
     },
     updated() {
-
+ 
+       
+if(this.response){
+     if(this.dayOff.offType == this.items[0] ){
+            this.userInfo.normal = this.userInfo.normal - 1
+        }
+        if(this.dayOff.offType == this.items[1] ){
+            this.userInfo.urgent = this.userInfo.urgent - 1
+        }
+authService.updateDayoffCount({userId:this.userInfo.userId, normal:this.userInfo.normal, urgent: this.userInfo.urgent}).then(res =>{
+        console.log(res)
+        })
+}    
+        
     },
     created() {
         this.dayOff.userId = this.userInfo.userId;
@@ -156,6 +165,7 @@ export default {
     methods: {
         ...mapActions(["send"]),
     },
+
 };
 </script>
 

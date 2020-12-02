@@ -95,8 +95,8 @@ export default {
         check: false,
         isactive: true,
         createdOn: Date.now().toString(),
-        normal:"15",
-        urgent:"15",
+        normal:"",
+        urgent:"",
       },
     };
   },

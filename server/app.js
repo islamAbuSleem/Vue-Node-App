@@ -21,9 +21,10 @@ app.use((req, res, next) => {
     err.status = 404;
     res.json(err)
 });
-mongoose.connect('mongodb://localhost:27017/workflow', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://islam:islam123@cluster0.ou5fv.mongodb.net/workflow?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // 'mongodb+srv://islam:islam123@cluster0.ou5fv.mongodb.net/workflow?retryWrites=true&w=majority'
+// 'mongodb://localhost:27017/workflow'
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', function() {

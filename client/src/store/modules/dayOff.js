@@ -13,7 +13,6 @@ const getters = {
 const actions = {
     send: ({ commit }, credentials) => {
 
-        console.log(credentials)
         authService.registerDayOff(credentials).then(res => {
             commit('setResponse', res)
         })

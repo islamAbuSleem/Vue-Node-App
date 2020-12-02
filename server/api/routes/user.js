@@ -65,39 +65,16 @@ module.exports = function(router) {
     })
 
     router.put('/user/userId/:userId', function(req, res) {
-        console.log(req.body);
-        let doc = {}
-        if (req.body.name) {
-            doc.name = req.body.name
-        }
-        if (req.body.first) {
-            doc.first = req.body.first
-        }
-        if (req.body.last) {
-            doc.last = req.body.last
-        }
-        if (req.body.email) {
-            doc.email = req.body.email
-        }
-        if (req.body.password) {
-            doc.password = req.body.password
-        }
-        if (req.body.userId) {
-            doc.userId = req.body.userId
-        }
-        if (req.body.dept) {
-            doc.dept = req.body.dept
-        }
-        if (req.body.normal) {
-            doc.normal = req.body.normal
-        }
-        if (req.body.urgent) {
-            doc.urgent = req.body.urgent
-        }
-        console.log(doc);
-        User.update(doc, function(err, resRaw) {
-            if (err) return console.log(err);
-            res.status(200).json(resRaw)
+        console.log(req.params.userId);
+        // User.findByIdAndUpdate({_id:req.params.id}, req.body).then(function(){
+        //     User.findOne({_id: req.params.id}).then(function(user){
+        //         res.send(user)
+        //     })
+        // })
+        User.findOneAndUpdate({userId:req.params.userId}, req.body).then(function(){
+            User.findOne({userId: req.params.userId}).then(function(user){
+                res.status(200).send(user)
+            })
         })
     })
 
