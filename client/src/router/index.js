@@ -6,6 +6,7 @@ import register from '../views/Register.vue'
 import duty from '../views/duty.vue'
 import ezen from '../views/ezenEnseraf.vue'
 import login from '../views/login.vue'
+import user from '../views/user.vue'
 
 Vue.use(VueRouter)
 
@@ -24,21 +25,7 @@ const routes = [{
         name: 'login',
         component: login
     },
-    {
-        path: '/rep2',
-        name: 'rep2',
-        component: vac
-    },
-    {
-        path: '/rep3',
-        name: 'rep3',
-        component: vac
-    },
-    {
-        path: '/rep4',
-        name: 'rep4',
-        component: vac
-    },
+
     {
         path: '/register',
         name: 'register',
@@ -53,6 +40,12 @@ const routes = [{
         path: '/ezen',
         name: 'ezen',
         component: ezen
+    },
+    {
+        path: '/U/:name',
+        name: 'user',
+        component: user,
+        props: true
     },
 ]
 
