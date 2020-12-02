@@ -95,6 +95,8 @@ export default {
         check: false,
         isactive: true,
         createdOn: Date.now().toString(),
+        normal:"15",
+        urgent:"15",
       },
     };
   },
@@ -112,6 +114,7 @@ export default {
         }
         console.log(res.status);
       });
+      console.log(JSON.stringify(this.userInfo))
     },
     validate() {
       console.log(this.userInfo.password === this.userInfo.repassword);
