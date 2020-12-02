@@ -26,8 +26,11 @@ module.exports = function(router) {
     })
     router.get('/user/email/:email', function(req, res) {
         User.find({ 'email': req.params.email }).exec()
-            .then(docs => res.status(200)
-                .json(docs))
+            .then(docs => {
+                res.status(200)
+                    .json(docs)
+                console.log(docs[0].email)
+            })
             .catch(err => res.status(500)
                 .json({
                     message: 'error finding user',
@@ -47,6 +50,8 @@ module.exports = function(router) {
             user.dept = req.body.dept,
             user.isactive = req.body.isactive,
             user.createdOn = req.body.createdOn,
+            user.normal = req.body.normal,
+            user.urgent = req.body.urgent,
             user.save(function(err, user) {
                 if (err) {
                     console.log(err)
@@ -59,15 +64,41 @@ module.exports = function(router) {
 
     })
 
-    router.put('/user/:id', function(req, res) {
+    router.put('/user/userId/:userId', function(req, res) {
         console.log(req.body);
-        let doc = {
-            isactive: req.body.isactive
+        let doc = {}
+        if (req.body.name) {
+            doc.name = req.body.name
+        }
+        if (req.body.first) {
+            doc.first = req.body.first
+        }
+        if (req.body.last) {
+            doc.last = req.body.last
+        }
+        if (req.body.email) {
+            doc.email = req.body.email
+        }
+        if (req.body.password) {
+            doc.password = req.body.password
+        }
+        if (req.body.userId) {
+            doc.userId = req.body.userId
+        }
+        if (req.body.dept) {
+            doc.dept = req.body.dept
+        }
+        if (req.body.normal) {
+            doc.normal = req.body.normal
+        }
+        if (req.body.urgent) {
+            doc.urgent = req.body.urgent
         }
         console.log(doc);
-        user.update(qry, doc, function(err, resRaw) {
+        User.update(doc, function(err, resRaw) {
             if (err) return console.log(err);
             res.status(200).json(resRaw)
         })
     })
+
 }

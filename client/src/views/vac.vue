@@ -135,7 +135,13 @@ export default {
         let x = new Date(this.dayOff.returnDate);
         x.getDay();
         this.dayOff.returnDay = this.days[x.getDay()];
-
+        
+        if(dayOff.offType == this.items[2] ){
+            this.userInfo.normal--
+        }
+        if(dayOff.offType == this.items[1] ){
+            this.userInfo.urgent--
+        }
     },
     updated() {
 

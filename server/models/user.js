@@ -5,6 +5,8 @@ let userSchema = new Schema({
     first: { type: String },
     last: { type: String },
     name: { type: String },
+    normal: { type: String },
+    urgent: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isactive: { type: Boolean, default: true },
