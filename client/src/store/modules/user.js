@@ -1,4 +1,6 @@
 import authService from "../../services/AuthenticationService";
+import EzenService from "../../services/ezenOperations";
+
 import router from '../../router';
 const state = {
     token: window.localStorage.getItem("login_token"),
@@ -44,6 +46,13 @@ const actions = {
         commit('userInfo', null);
         window.localStorage.removeItem("userInfo");
         router.push({ name: 'login' });
+    },
+    postEzen: ({ commit }, credentials) => {
+        console.log(credentials)
+        EzenService.registerEzen(credentials).then(res => {
+            commit('setResponse', res)
+        })
+
     }
 
 }

@@ -12,7 +12,7 @@
 
             </v-col>
             <v-col cols="6" class="ml-auto">
-                <v-text-field v-model="ezen.name" label="اسم مقدم الطلب" :hint="userInfo.name" justify-right reverse></v-text-field>
+                <v-text-field v-model="ezen.userName" label="اسم مقدم الطلب" :hint="userInfo.userName" justify-right reverse></v-text-field>
             </v-col>
         </v-row>
         <h3 class="text-right">ارجو من سيادتكم التكرم بالموافقه علي اذن</h3>
@@ -38,23 +38,28 @@
                 </v-select>
             </v-col>
         </v-row>
+                        <v-btn depressed @click="postEzen(ezen)" class="m-auto " color="primary text-center">
+                    send
+                </v-btn>
     </form>
 </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
     data() {
         return {
             items: ["صباحا","مساء"],
             ezen:{
                 dept:'',
-                name:'',
+                userName: "",
                 userId:'',
                 date:'',
                 time:'',
-                day:''
+                day:'',
+                type:'ezen enseraf'
             },
              days: {
             0: "الاحد",
@@ -77,7 +82,9 @@ export default {
 
         this.ezen.dept = this.userInfo.dept;
         this.ezen.userId = this.userInfo.userId;
-        console.log(this.ezen);
+    },
+    methods: {
+        ...mapActions(["postEzen"])
     },
 
 }

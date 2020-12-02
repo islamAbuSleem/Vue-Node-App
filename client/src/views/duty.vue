@@ -12,7 +12,7 @@
 
             </v-col>
             <v-col cols="6" class="ml-auto">
-                <v-text-field label="اسم مقدم الطلب" v-model="ezenMa2moria.name" :hint="userInfo.name" justify-right reverse></v-text-field>
+                <v-text-field label="اسم مقدم الطلب" v-model="ezenMa2moria.userName" :hint="userInfo.name" justify-right reverse></v-text-field>
             </v-col>
         </v-row>
         <v-row>
@@ -62,27 +62,34 @@
                 <v-textarea outlined v-model="ezenMa2moria.desc" name="input-7-4" label="سبب القيام بالمهمه" value=""></v-textarea>
             </v-col>
         </v-row>
+                      <v-btn depressed @click="postEzen(ezenMa2moria)" class="m-auto " color="primary text-center">
+                    send
+                </v-btn>
     </form>
 </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
     data() {
         return {
             means: ["قطار", "عربه الشركه", "تاكسي", "طائره"],
             items: ["صباحا","مساء"],
             ezenMa2moria:{
+                type:'ezen m2moria',
                 dept:'',
-                name:'',
+                userName:'',
                 userId:'',
                 date:'',
                 means:'',
                 startDate:'',
                 endDate:'',
                 period:'',
-                desc:''
+                desc:'',
+                time:"NA",
+                day:"NA"
             },
              days: {
             0: "الاحد",
@@ -114,7 +121,10 @@ export default {
 
         this.ezenMa2moria.dept = this.userInfo.dept;
         this.ezenMa2moria.userId = this.userInfo.userId;
-        console.log(this.ezenMa2moria);
+                console.log(JSON.stringify(this.ezenMa2moria))
+
+    },methods: {
+        ...mapActions(["postEzen"])
     },
 
 }

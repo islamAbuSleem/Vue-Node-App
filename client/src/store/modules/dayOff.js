@@ -12,21 +12,21 @@ const getters = {
 
 const actions = {
     send: ({ commit }, credentials) => {
-      
+
         console.log(credentials)
         authService.registerDayOff(credentials).then(res => {
             commit('setResponse', res)
         })
         if (state.response == '') {
-            credentials.failed = true;           
-             credentials.success = false;
+            credentials.failed = true;
+            credentials.success = false;
 
         } else {
             credentials.success = true;
-            credentials.failed = true;           
+            credentials.failed = true;
 
         }
-    }
+    },
 }
 
 
