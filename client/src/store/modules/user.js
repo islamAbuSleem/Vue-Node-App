@@ -1,15 +1,19 @@
 import authService from "../../services/AuthenticationService";
 import EzenService from "../../services/ezenOperations";
+import updateOffCount from "../../services/dayOffoperations";
 
 import router from '../../router';
 const state = {
     token: window.localStorage.getItem("login_token"),
-    userInfo: JSON.parse(window.localStorage.getItem("userInfo"))
+    userInfo: JSON.parse(window.localStorage.getItem("userInfo")),
+    items: ["اعتيادي", "عارضه", "يوم اداي", "IOD", "نصف يوم"],
+
 }
 
 const getters = {
     isLoggedIn: (state) => !!state.token,
-    userInfo: (state) => state.userInfo
+    userInfo: (state) => state.userInfo,
+items: (state) => state.items
 }
 
 const actions = {
@@ -48,11 +52,32 @@ const actions = {
         router.push({ name: 'login' });
     },
     postEzen: ({ commit }, credentials) => {
-        console.log(credentials)
         EzenService.registerEzen(credentials).then(res => {
             commit('setResponse', res)
         })
+    },
+    // eslint-disable-next-line no-unused-vars
+    upateCount: ({commit}, dayoff ) =>{
+        console.log(state.userInfo)
+        console.log(dayoff)
+        console.log(state.items)
 
+        if(dayoff.offType == state.items[0] ){
+            state.userInfo.normal = +state.userInfo.normal - +dayoff.period;
+            console.log(state.userInfo.normal)
+
+        }else if(dayoff.offType == state.items[1] ){
+            state.userInfo.urgent= +state.userInfo.urgent  - +dayoff.period;
+            console.log(state.userInfo.urgent)
+
+        }
+        console.log(state.userInfo)
+        updateOffCount.updateDayOffCount(state.userInfo.userId,state.userInfo).then(res =>{ 
+            commit('setUserInfo', res.data)
+
+            console.log(res.data)
+        
+        })
     }
 
 }
@@ -65,8 +90,8 @@ const mutations = {
     },
     setUserInfo: (state, userInfo) => {
         state.userInfo = userInfo
+        window.localStorage.setItem("userInfo", JSON.stringify(userInfo))
     }
-
 }
 
 export default {

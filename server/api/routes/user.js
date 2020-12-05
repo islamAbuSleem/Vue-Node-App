@@ -50,8 +50,8 @@ module.exports = function(router) {
             user.dept = req.body.dept,
             user.isactive = req.body.isactive,
             user.createdOn = req.body.createdOn,
-            user.normal = req.body.normal,
-            user.urgent = req.body.urgent,
+            user.normal = "15",
+            user.urgent = "6",
             user.save(function(err, user) {
                 if (err) {
                     console.log(err)

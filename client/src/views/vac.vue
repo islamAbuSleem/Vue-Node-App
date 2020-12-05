@@ -69,7 +69,7 @@
                     </v-col>
                 </v-row>
 
-                <v-btn depressed @click="send(dayOff)" class="m-auto " color="primary text-center">
+                <v-btn depressed @click="send(dayOff);upateCount(dayOff)" class="m-auto" color="primary text-center" :disabled="validated">
                     send
                 </v-btn>
 
@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import authService from '../services/dayOffoperations'
 import {
     mapGetters
 } from "vuex";
@@ -92,7 +91,7 @@ import {
 } from "vuex";
 export default {
     data: () => ({
-
+        valid:true,
         dayOff: {
             userId: "",
             offType: "",
@@ -104,10 +103,7 @@ export default {
             returnDay: "",
             returnDate: "",
             doWorkName: "",
-            success: "",
-            failed: "",
         },
-        items: ["اعتيادي", "عارضه", "يوم اداي", "IOD", "نصف يوم"],
         days: {
             0: "الاحد",
             1: "الاثنين",
@@ -132,27 +128,10 @@ export default {
                 this.dayOff.period = diffDays + 1;
             }
         }
-
         let x = new Date(this.dayOff.returnDate);
         x.getDay();
         this.dayOff.returnDay = this.days[x.getDay()];
         
-        
-    },
-    updated() {
- 
-       
-if(this.response){
-     if(this.dayOff.offType == this.items[0] ){
-            this.userInfo.normal = this.userInfo.normal - 1
-        }
-        if(this.dayOff.offType == this.items[1] ){
-            this.userInfo.urgent = this.userInfo.urgent - 1
-        }
-authService.updateDayoffCount({userId:this.userInfo.userId, normal:this.userInfo.normal, urgent: this.userInfo.urgent}).then(res =>{
-        console.log(res)
-        })
-}    
         
     },
     created() {
@@ -160,10 +139,33 @@ authService.updateDayoffCount({userId:this.userInfo.userId, normal:this.userInfo
         this.dayOff.dept = this.userInfo.dept;
     },
     computed: {
-        ...mapGetters(["userInfo", "datOff", "response"]),
+        ...mapGetters(["userInfo", "datOff", "response","items"]),
+        validated:function(){
+            let dayOffValues = Object.values(this.dayOff);
+            let boolDayOffValues = dayOffValues.map(function(x){
+                return !!x;
+            })
+            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+            this.valid = boolDayOffValues.includes(false);
+            console.log(boolDayOffValues.includes(false))
+            return this.valid;
+        }
     },
     methods: {
-        ...mapActions(["send"]),
+        ...mapActions(["send","upateCount"]),
+    //     updateDayOffCount(){
+    //         if(this.dayOff.offType == this.items[0] ){
+    //             // eslint-disable-next-line no-unused-vars
+    //              this.userInfo.normal = +this.userInfo.normal - +this.dayOff.period;
+    //         }else if(this.dayOff.offType == this.items[1] ){
+    //             // eslint-disable-next-line no-unused-vars
+    //             this.userInfo.urgent= +this.userInfo.urgent  - +this.dayOff.period;
+    //                              console.log(this.userInfo.urgent)
+    //         }
+    //         console.log(this.userInfo)
+    //         // eslint-disable-next-line no-undef
+    //         authService.updateDayOffCount(this.userInfo.userId,this.userInfo).then(res => console.log(res))
+    //     }
     },
 
 };

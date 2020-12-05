@@ -3,7 +3,8 @@ export default {
     registerDayOff(credentials) {
         return Api().post('/api/dayOff', credentials);
     },
-    updateDayoffCount(credentials) {
-        return Api().put(`/api/user/userId/${credentials.userId}`, credentials);
+    updateDayOffCount(id,count) {
+        console.log(id,count)
+        return Api().put(`/api/user/userId/${id}`, count);
     },
 }
