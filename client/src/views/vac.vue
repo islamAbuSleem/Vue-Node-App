@@ -153,19 +153,6 @@ export default {
     },
     methods: {
         ...mapActions(["send","upateCount"]),
-    //     updateDayOffCount(){
-    //         if(this.dayOff.offType == this.items[0] ){
-    //             // eslint-disable-next-line no-unused-vars
-    //              this.userInfo.normal = +this.userInfo.normal - +this.dayOff.period;
-    //         }else if(this.dayOff.offType == this.items[1] ){
-    //             // eslint-disable-next-line no-unused-vars
-    //             this.userInfo.urgent= +this.userInfo.urgent  - +this.dayOff.period;
-    //                              console.log(this.userInfo.urgent)
-    //         }
-    //         console.log(this.userInfo)
-    //         // eslint-disable-next-line no-undef
-    //         authService.updateDayOffCount(this.userInfo.userId,this.userInfo).then(res => console.log(res))
-    //     }
     },
 
 };
