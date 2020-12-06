@@ -6,8 +6,7 @@
         label="Email"
         required
       ></v-text-field>
-      <v-text-field v-model="userInfo.password" label="Password" required>
-      </v-text-field>
+      <v-text-field v-model="userInfo.password" label="Password" required> </v-text-field>
 
       <v-btn color="primary" @click="login(userInfo)">Login</v-btn>
     </v-form>
