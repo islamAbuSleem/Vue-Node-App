@@ -1,6 +1,7 @@
 <template>
   <v-app id="inspire">
-    <navbar />
+    <navbar v-if="isLoggedIn" />
+    <login v-else />
     <v-main class="mx-4 mb-4">
       <router-view></router-view>
     </v-main>
@@ -9,15 +10,20 @@
 
 <script>
 import navbar from "@/components/navbar";
-
+import login from "@/components/login";
+import {mapGetters} from 'vuex'
 export default {
   name: "App",
   components: {
     navbar,
+    login
   },
   data() {
     return {};
   },
+  computed:{
+    ...mapGetters(["isLoggedIn"])
+  }
 };
 </script>
 

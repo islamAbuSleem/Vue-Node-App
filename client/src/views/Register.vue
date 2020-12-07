@@ -46,7 +46,7 @@
           {{ passwordMatch }}
         </p>
         <v-row align="center">
-          <v-col cols="6" class="ml-auto">
+          <v-col cols="3" class="ml-auto">
             <v-text-field
               v-model.number="userInfo.userId"
               :rules="emailRules"
@@ -54,12 +54,34 @@
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="6" class="ml-auto">
-            <v-select
+          <v-col cols="9" class="ml-auto">
+<!--            <v-select
               :items="items"
               v-model="userInfo.dept"
               label="Department"
-            ></v-select>
+            ></v-select> -->
+
+                 
+
+<v-row>
+<v-col>
+                    <select :disabled="teams.length == 0" v-model="selectedTeam" class="main-select" v-if="selectedDept">
+                    <option value="" disabled>Select a Team</option>
+                    <option v-for="(team_obj, team) in teams" :key="team">{{team_obj}}</option>
+                </select>
+</v-col>
+
+<v-col>
+           <select v-model="selectedDept" class="main-select">
+                    <option value="" disabled>Select a Department</option>
+                     <option v-for="(dept_obj, dept) in dept" :value="dept" :key="dept">{{dept}}</option>
+                </select>
+</v-col>
+</v-row>
+             
+
+     
+
           </v-col>
           <v-col class="text-center">
             <v-btn color="error" @click="register"> register </v-btn>
@@ -75,6 +97,13 @@ import authService from "../services/AuthenticationService";
 export default {
   data() {
     return {
+      dept:{
+              "operation":["oracle","power","system admin"],
+              "support":["support","help desk", "warsha"]
+          },
+      teams:[],
+      selectedDept: "",
+      selectedTeam:[],
       passwordMatch: "",
       show1: false,
       items: ["التشغيل", "الشبكات", "المسانده", "الدعم القني"],
@@ -99,7 +128,15 @@ export default {
         urgent:"",
       },
     };
-  },
+  },watch:{
+        selectedDept:function(){
+            this.teams = [];
+            this.selectedTeam = ""
+            if(this.selectedDept.length > 0){
+                this.teams = this.dept[this.selectedDept]
+            }
+        }
+    },
   methods: {
     register() {
       this.userInfo.first = this.userInfo.name.split(" ")[0];
@@ -139,5 +176,20 @@ export default {
   p {
     color: rgb(231, 44, 44);
   }
+  .main-select{
+width: 100%;
+  min-width: 60px;
+
+  border: 1px solid var(--select-border);
+  padding: 0.25em 0.5em;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.1;
+  display: inline-block;
+  border-bottom: 1px solid #888;
+  margin-left: 10px;
+  color: #666;
+  
+}   
 }
 </style>

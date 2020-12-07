@@ -5,7 +5,6 @@ import vac from '../views/vac.vue'
 import register from '../views/Register.vue'
 import duty from '../views/duty.vue'
 import ezen from '../views/ezenEnseraf.vue'
-import login from '../views/login.vue'
 import user from '../views/user.vue'
 
 Vue.use(VueRouter)
@@ -20,11 +19,11 @@ const routes = [{
         name: 'needVac',
         component: vac
     },
-    {
-        path: '/login',
-        name: 'login',
-        component: login
-    },
+    // {
+    //     path: '/login',
+    //     name: 'login',
+    //     component: login
+    // },
 
     {
         path: '/register',

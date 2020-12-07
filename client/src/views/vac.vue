@@ -4,8 +4,7 @@
     <form>
         <div class="title"></div>
         <div class="user-data pt-5">
-            <v-alert dense text width="200" class="mt-5" type="success" v-if="dayOff.success"> Sent successully </v-alert>
-            <v-alert dense text width="300" class="mt-5 d-block m-auto" type="error" v-if="dayOff.failed"> Failed, Please Check Your entry </v-alert>
+            <v-alert dense text width="200" class="mt-5" type="success" v-if="success"> Sent successully </v-alert>
             <h2 class="text-center">طلب اجازه</h2>
             <v-container class="text-center">
 
@@ -69,7 +68,7 @@
                     </v-col>
                 </v-row>
 
-                <v-btn depressed @click="send(dayOff);upateCount(dayOff)" class="m-auto" color="primary text-center" :disabled="validated">
+                <v-btn depressed @click="send(dayOff);upateCount(dayOff);sentSuccess()" class="m-auto" color="primary text-center" :disabled="validated">
                     send
                 </v-btn>
 
@@ -91,6 +90,7 @@ import {
 } from "vuex";
 export default {
     data: () => ({
+        success:false,
         valid:true,
         dayOff: {
             userId: "",
@@ -153,6 +153,15 @@ export default {
     },
     methods: {
         ...mapActions(["send","upateCount"]),
+        sentSuccess(){
+            this.success = true;
+            setTimeout(()=>{
+                
+                this.$router.push({ name: 'user', params: { name: this.userInfo.name } })
+                this.success = false;
+            },1000)
+            
+        }
     },
 
 };

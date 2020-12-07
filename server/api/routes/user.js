@@ -39,7 +39,6 @@ module.exports = function(router) {
     })
 
     router.post('/user', function(req, res) {
-        console.log(req.body);
         let user = new User();
         user.name = req.body.name,
             user.first = req.body.first,
@@ -57,7 +56,7 @@ module.exports = function(router) {
                     console.log(err)
                     return res.send('E-mail already exists')
                 } else {
-                    console.log('save user successfully...');
+                    console.log(user, 'save user successfully...');
                     return res.status(200).json(user)
                 }
             })
@@ -71,8 +70,8 @@ module.exports = function(router) {
         //         res.send(user)
         //     })
         // })
-        User.findOneAndUpdate({userId:req.params.userId}, req.body).then(function(){
-            User.findOne({userId: req.params.userId}).then(function(user){
+        User.findOneAndUpdate({ userId: req.params.userId }, req.body).then(function() {
+            User.findOne({ userId: req.params.userId }).then(function(user) {
                 res.status(200).send(user)
             })
         })
