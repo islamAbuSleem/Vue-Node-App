@@ -13,7 +13,7 @@ const state = {
 const getters = {
     isLoggedIn: (state) => !!state.token,
     userInfo: (state) => state.userInfo,
-items: (state) => state.items
+    items: (state) => state.items
 }
 
 const actions = {
@@ -23,7 +23,8 @@ const actions = {
         if (re.test(String(credentials.email).toLowerCase())) {
             authService.login(credentials).then((res) => {
                 commit('setUserInfo', res.data[0])
-                window.localStorage.setItem("login_token", res.data[0]._id)
+                commit('setToken', res.data[0]._id)
+
                 window.localStorage.setItem("userInfo", JSON.stringify(res.data[0]))
 
                 if (
@@ -43,6 +44,7 @@ const actions = {
             credentials.feedback = "Please enter a valid E-mail";
             credentials.check = true;
         }
+        commit('setToken', state.userInfo._id);
     },
     logout: ({ commit }) => {
         commit('setToken', null);
@@ -57,26 +59,26 @@ const actions = {
         })
     },
     // eslint-disable-next-line no-unused-vars
-    upateCount: ({commit}, dayoff ) =>{
+    upateCount: ({ commit }, dayoff) => {
         console.log(state.userInfo)
         console.log(dayoff)
         console.log(state.items)
 
-        if(dayoff.offType == state.items[0] ){
+        if (dayoff.offType == state.items[0]) {
             state.userInfo.normal = +state.userInfo.normal - +dayoff.period;
             console.log(state.userInfo.normal)
 
-        }else if(dayoff.offType == state.items[1] ){
-            state.userInfo.urgent= +state.userInfo.urgent  - +dayoff.period;
+        } else if (dayoff.offType == state.items[1]) {
+            state.userInfo.urgent = +state.userInfo.urgent - +dayoff.period;
             console.log(state.userInfo.urgent)
 
         }
         console.log(state.userInfo)
-        updateOffCount.updateDayOffCount(state.userInfo.userId,state.userInfo).then(res =>{ 
+        updateOffCount.updateDayOffCount(state.userInfo.userId, state.userInfo).then(res => {
             commit('setUserInfo', res.data)
 
             console.log(res.data)
-        
+
         })
     }
 
@@ -87,6 +89,7 @@ const actions = {
 const mutations = {
     setToken: (state, token) => {
         state.token = token;
+        window.localStorage.setItem("login_token", token)
     },
     setUserInfo: (state, userInfo) => {
         state.userInfo = userInfo
