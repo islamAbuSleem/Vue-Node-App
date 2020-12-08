@@ -5,21 +5,34 @@
         {{ userInfo.feedback }}
       </v-alert>
       <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field
+      <v-row>
+      
+        <v-col cols="9">
+                <v-text-field
           v-model="userInfo.name"
           :counter="15"
-          :rules="nameRules"
           label="Name"
           required
         ></v-text-field>
+        </v-col>
+         <v-col cols="3" class="ml-auto">
+            <v-text-field
+              v-model.number="userInfo.userId"
+              label="User ID"
+              required
+            ></v-text-field>
+          </v-col>
+      </v-row>
+
+
         <v-text-field
           v-model="userInfo.email"
-          :rules="emailRules"
           label="E-mail"
           required
         ></v-text-field>
-
-        <v-text-field
+<v-row>
+  <v-col>
+            <v-text-field
           :rules="[rules.required, rules.min]"
           v-model="userInfo.password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -30,6 +43,8 @@
           counter
           @click:append="show1 = !show1"
         ></v-text-field>
+  </v-col>
+  <v-col>
         <v-text-field
           :rules="[rules.required, rules.min]"
           v-model="userInfo.repassword"
@@ -42,28 +57,33 @@
           v-on:blur="validate"
           @click:append="show1 = !show1"
         ></v-text-field>
+  </v-col>
+</v-row>
+
+
         <p v-if="passwordMatch">
           {{ passwordMatch }}
         </p>
         <v-row align="center">
-          <v-col cols="3" class="ml-auto">
-            <v-text-field
-              v-model.number="userInfo.userId"
-              :rules="emailRules"
-              label="User ID"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="9" class="ml-auto">
-<!--            <v-select
+              <v-col cols="3">
+              <v-select
               :items="items"
-              v-model="userInfo.dept"
-              label="Department"
-            ></v-select> -->
+              v-model="userInfo.role"
+              label="Role"
+            ></v-select> 
+</v-col>  
+          <v-col cols="9" class="ml-auto">
+      
 
-                 
+          
 
 <v-row>
+<v-col>
+           <select v-model="selectedDept" class="main-select">
+                    <option value="" disabled>Department</option>
+                     <option v-for="(dept_obj, dept) in dept" :value="dept" :key="dept">{{dept}}</option>
+                </select>
+</v-col>
 <v-col>
                     <select :disabled="teams.length == 0" v-model="selectedTeam" class="main-select" v-if="selectedDept">
                     <option value="" disabled>Select a Team</option>
@@ -71,12 +91,8 @@
                 </select>
 </v-col>
 
-<v-col>
-           <select v-model="selectedDept" class="main-select">
-                    <option value="" disabled>Select a Department</option>
-                     <option v-for="(dept_obj, dept) in dept" :value="dept" :key="dept">{{dept}}</option>
-                </select>
-</v-col>
+
+
 </v-row>
              
 
@@ -106,7 +122,7 @@ export default {
       selectedTeam:[],
       passwordMatch: "",
       show1: false,
-      items: ["التشغيل", "الشبكات", "المسانده", "الدعم القني"],
+      items: ["Team member", "Team leader", "Manager"],
       rules: {
         required: (value) => !!value || "Required.",
         min: (v) => v.length >= 8 || "Min 8 characters",
@@ -126,9 +142,15 @@ export default {
         createdOn: Date.now().toString(),
         normal:"",
         urgent:"",
+        role:"",
+        team:""
       },
     };
-  },watch:{
+  },beforeUpdate() {
+    console.log(this.userInfo) 
+  }
+  
+  ,watch:{
         selectedDept:function(){
             this.teams = [];
             this.selectedTeam = ""
@@ -141,6 +163,9 @@ export default {
     register() {
       this.userInfo.first = this.userInfo.name.split(" ")[0];
       this.userInfo.last = this.userInfo.name.split(" ")[1];
+            this.userInfo.dept = this.selectedDept;
+
+      this.userInfo.team = this.selectedTeam;
       authService.register(this.userInfo).then((res) => {
         if (res.data["_id"]) {
           this.userInfo.check = false;
@@ -189,7 +214,8 @@ width: 100%;
   border-bottom: 1px solid #888;
   margin-left: 10px;
   color: #666;
-  
+  -moz-appearance: auto;
+    -webkit-appearance: auto;
 }   
 }
 </style>

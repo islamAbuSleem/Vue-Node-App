@@ -51,6 +51,8 @@ module.exports = function(router) {
             user.createdOn = req.body.createdOn,
             user.normal = "15",
             user.urgent = "6",
+            user.team = req.body.team,
+            user.role = req.body.role,
             user.save(function(err, user) {
                 if (err) {
                     console.log(err)

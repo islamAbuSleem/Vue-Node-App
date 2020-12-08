@@ -103,6 +103,8 @@ export default {
             returnDay: "",
             returnDate: "",
             doWorkName: "",
+            team:"",
+            status:"pending"
         },
         days: {
             0: "الاحد",
@@ -131,7 +133,8 @@ export default {
         let x = new Date(this.dayOff.returnDate);
         x.getDay();
         this.dayOff.returnDay = this.days[x.getDay()];
-        
+                this.dayOff.team = this.userInfo.team;
+
         
     },
     created() {
