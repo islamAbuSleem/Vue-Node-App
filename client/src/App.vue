@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <navbar v-if="isLoggedIn" />
-    <login v-else />
+    <login v-else-if="$route.path == '/'" />
     <v-main class="mx-4 mb-4">
       <router-view></router-view>
     </v-main>

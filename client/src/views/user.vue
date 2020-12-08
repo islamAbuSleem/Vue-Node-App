@@ -24,10 +24,8 @@
              <v-chip class="ma-2 text-right" color="primary">العارضه</v-chip>
   </v-row>
        
-
-
-
-
+       <router-link class="text-right d-block mt-5" :to="{name: 'initialapprove'}" >موافقه مبدائيه</router-link>
+       <router-link class="text-right d-block mt-5" :to="{name: 'approve'}" >موافقه </router-link>
     </div>
 </template>
 
@@ -39,7 +37,7 @@ export default {
           
         }
     },created() {
-        console.log("i'm here"+ " "+ this.$route.params.name)
+        console.log("i'm here"+ " "+ this.userInfo.role)
     },computed:{
         ...mapGetters(["userInfo"])
     }

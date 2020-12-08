@@ -12,7 +12,9 @@ let userSchema = new Schema({
     isactive: { type: Boolean, default: true },
     createdOn: { type: String, required: true },
     userId: { type: String, required: true, unique: true },
-    dept: { type: String, required: true }
+    dept: { type: String, required: true },
+    role: { type: String, required: true },
+    team: { type: String, required: true }
 });
 
 const User = mongoose.model('User', userSchema);

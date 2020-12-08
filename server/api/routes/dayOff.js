@@ -24,6 +24,26 @@ module.exports = function(router) {
                     error: err
                 }))
     })
+    router.get('/dayOff/team/:team', function(req, res) {
+        DayOff.find({ 'team': req.params.team }).exec()
+            .then(docs => res.status(200)
+                .json(docs))
+            .catch(err => res.status(500)
+                .json({
+                    message: 'error finding user',
+                    error: err
+                }))
+    })
+    router.get('/dayOff/dept/:dept', function(req, res) {
+        DayOff.find({ 'dept': req.params.dept }).exec()
+            .then(docs => res.status(200)
+                .json(docs))
+            .catch(err => res.status(500)
+                .json({
+                    message: 'error finding user',
+                    error: err
+                }))
+    })
 
     router.post('/dayOff', function(req, res) {
         console.log(req.body);
@@ -40,6 +60,8 @@ module.exports = function(router) {
             dayoff.returnDay = req.body.returnDay,
             dayoff.returnDate = req.body.returnDate,
             dayoff.doWorkName = req.body.doWorkName,
+            dayoff.team = req.body.team,
+            dayoff.status = req.body.status,
             dayoff.save(function(err, dayoff) {
                 if (err) { return console.log(err); } else {
                     console.log('save dayOff successfully...');
@@ -49,15 +71,14 @@ module.exports = function(router) {
 
     })
 
+
     router.put('/dayOff/:id', function(req, res) {
-        console.log(req.body);
-        let doc = {
-            isactive: req.body.isactive
-        }
-        console.log(doc);
-        DayOff.update(qry, doc, function(err, resRaw) {
-            if (err) return console.log(err);
-            res.status(200).json(resRaw)
+        console.log(req.params.id);
+        DayOff.findOneAndUpdate({ _id: req.params.id }, req.body).then(function() {
+            DayOff.findOne({ _id: req.params.id }).then(function(user) {
+                res.status(200).send(user)
+            })
         })
     })
+
 }
