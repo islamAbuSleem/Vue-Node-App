@@ -26,6 +26,7 @@
        
        <router-link class="text-right d-block mt-5" :to="{name: 'initialapprove'}" >موافقه مبدائيه</router-link>
        <router-link class="text-right d-block mt-5" :to="{name: 'approve'}" >موافقه </router-link>
+       <router-link class="text-right d-block mt-5" :to="{name: 'hr-list'}" >HR List </router-link>
     </div>
 </template>
 

@@ -17,4 +17,7 @@ export default {
         console.log(id, data)
         return Api().put(`/api/dayOff/${id}`, data);
     },
+    getAllDayOff() {
+        return Api().get(`/api/dayOff`);
+    },
 }

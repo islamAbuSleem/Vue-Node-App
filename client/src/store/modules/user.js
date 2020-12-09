@@ -1,6 +1,5 @@
 import authService from "../../services/AuthenticationService";
 import EzenService from "../../services/ezenOperations";
-import updateOffCount from "../../services/dayOffoperations";
 
 import router from '../../router';
 const state = {
@@ -58,29 +57,15 @@ const actions = {
             commit('setResponse', res)
         })
     },
-    // eslint-disable-next-line no-unused-vars
-    upateCount: ({ commit }, dayoff) => {
-        console.log(state.userInfo)
-        console.log(dayoff)
-        console.log(state.items)
+    // // eslint-disable-next-line no-unused-vars
+    // upateCount: ({ commit }, dayoff) => {
+    //     updateOffCount.updateDayOffCount(state.userInfo.userId, state.userInfo).then(res => {
+    //         commit('setUserInfo', res.data)
 
-        if (dayoff.offType == state.items[0]) {
-            state.userInfo.normal = +state.userInfo.normal - +dayoff.period;
-            console.log(state.userInfo.normal)
+    //         console.log(res.data)
 
-        } else if (dayoff.offType == state.items[1]) {
-            state.userInfo.urgent = +state.userInfo.urgent - +dayoff.period;
-            console.log(state.userInfo.urgent)
-
-        }
-        console.log(state.userInfo)
-        updateOffCount.updateDayOffCount(state.userInfo.userId, state.userInfo).then(res => {
-            commit('setUserInfo', res.data)
-
-            console.log(res.data)
-
-        })
-    }
+    //     })
+    // }
 
 }
 
