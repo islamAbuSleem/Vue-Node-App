@@ -68,7 +68,7 @@
                     </v-col>
                 </v-row>
 
-                <v-btn depressed @click="send(dayOff);upateCount(dayOff);sentSuccess()" class="m-auto" color="primary text-center" :disabled="validated">
+                <v-btn depressed @click="send(dayOff);sentSuccess()" class="m-auto" color="primary text-center" :disabled="validated">
                     send
                 </v-btn>
 
@@ -155,7 +155,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(["send","upateCount"]),
+        ...mapActions(["send"]),
         sentSuccess(){
             this.success = true;
             setTimeout(()=>{

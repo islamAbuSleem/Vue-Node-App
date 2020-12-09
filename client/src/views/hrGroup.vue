@@ -1,11 +1,12 @@
 <template>
     <div dir="rtl">
-    
+
+
         <v-row class="">
             <v-col cols="3" v-for="user in filterAccepted" :key="user._id">
            <template >
   <v-card 
-    :loading="loading"
+    
     class="mx-auto mt-6"
     max-width="374"
     shaped
@@ -34,20 +35,14 @@
 
     <v-card-actions >
  
-      <v-btn
-        color="red lighten-2 "
-        text
-        @click="decline(user._id,user)"
-      >
-        Decline
-      </v-btn>
+
            <v-btn
         color="green lighten-1 "
         text
-        @click="accept(user._id,user)"
+        @click="done(user._id,user)"
         class="mr-auto"
       >
-        Approve
+        done
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -66,34 +61,32 @@ export default {
             teamDayOff: []
         }
     },computed:{
-        ...mapGetters(["userInfo","items"]),
+        ...mapGetters(["userInfo"]),
         filterAccepted(){
-            return this.teamDayOff.filter(i => i.status === 'inital accepted')
+            return this.teamDayOff.filter(i => i.status === 'accepted')
         }
     },
     created() {
-        getDayOff.getDayOffForApprove(this.userInfo.dept).then(res =>{
+        getDayOff.getAllDayOff().then(res =>{
            this.teamDayOff = res.data;
         })
     },methods: {
         accept(id,user){
-            user.status = "accepted";
+            user.status = "inital accepted";
             console.log(id,user)
             getDayOff.updateDayOffStatus(id,user).then(res =>{
                 console.log(res)
             })
-            if(user.offType == this.items[0]){
-                this.userInfo.normal = +this.userInfo.normal - +user.period
-            }else if(user.offType == this.items[1]){
-                this.userInfo.urgent = +this.userInfo.urgent - +user.period
-            }
-            getDayOff.updateDayOffCount(user.userId,this.userInfo).then(res => {
-                console.log(res)
-                this.$store.commit("setUserInfo", res.data)
-            })
         },
         decline(id,user){
             user.status = "declined";
+            console.log(id,user)
+            getDayOff.updateDayOffStatus(id,user).then(res =>{
+                console.log(res)
+            })
+        },
+        done(id,user){
+            user.status = "Done";
             console.log(id,user)
             getDayOff.updateDayOffStatus(id,user).then(res =>{
                 console.log(res)
