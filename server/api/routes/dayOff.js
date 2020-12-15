@@ -1,5 +1,6 @@
 const DayOff = require('../../models/dayOff');
-const fs = require('fs')
+const fs = require('fs');
+const { json } = require('body-parser');
 module.exports = function(router) {
 
 
@@ -47,8 +48,7 @@ module.exports = function(router) {
     router.get('/dayOff', function(req, res) {
         DayOff.find().exec()
             .then(docs => {
-
-
+                fs.writeFile('./data.json', JSON.stringify(docs), (err) => console.log(err))
                 res.status(200).json(docs)
 
             })

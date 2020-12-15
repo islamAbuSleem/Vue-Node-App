@@ -1,5 +1,14 @@
 <template>
     <div dir="rtl">
+<v-btn color="success"><download-excel
+  class="btn btn-default"
+  :data="json_data"
+  :fields="json_fields"
+  worksheet="My Worksheet"
+  name="filename.xls"
+>
+  Download Excel
+</download-excel></v-btn>
 
 
         <v-row class="">
@@ -58,9 +67,31 @@ import getDayOff from '../services/dayOffoperations';
 export default {
     data() {
         return {
-            teamDayOff: []
+            teamDayOff: [],
+                  json_fields: {
+                      "userId":"userId",
+      "userName": "userName",
+      "startDate": "startDate",
+      "endDate": "endDate",
+      "period": "period",
+      "dept": "dept",
+      "doWorkName": "doWorkName",
+      "team": "team",
+      "returnDay": "returnDay",
+
+    },json_data: []
+    , json_meta: [
+      [
+        {
+          key: "charset",
+          value: "utf-8",
+        },
+      ],
+    ],
         }
-    },computed:{
+    },
+    
+    computed:{
         ...mapGetters(["userInfo"]),
         filterAccepted(){
             return this.teamDayOff.filter(i => i.status === 'accepted')
@@ -69,7 +100,10 @@ export default {
     created() {
         getDayOff.getAllDayOff().then(res =>{
            this.teamDayOff = res.data;
+                this.json_data = this.teamDayOff.filter(i => i.status === 'accepted')
+
         })
+
     },methods: {
         accept(id,user){
             user.status = "inital accepted";
