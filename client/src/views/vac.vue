@@ -1,10 +1,25 @@
 <template>
 <div class="vac">
+<template>
+  <div class="text-center">
+    <v-snackbar
+          color="success"
+          class="mt-5"
+      v-model="snackbar"
+      :timeout="timeout"
+       absolute
+      top
+    text
+    >
+      {{ text }}
 
+
+    </v-snackbar>
+  </div>
+</template>
     <form>
         <div class="title"></div>
         <div class="user-data pt-5">
-            <v-alert dense text width="200" class="mt-5" type="success" v-if="success"> Sent successully </v-alert>
             <h2 class="text-center">طلب اجازه</h2>
             <v-container class="text-center">
 
@@ -68,7 +83,7 @@
                     </v-col>
                 </v-row>
 
-                <v-btn depressed @click="send(dayOff);sentSuccess()" class="m-auto" color="primary text-center" :disabled="validated">
+                <v-btn depressed @click="send(dayOff);sentSuccess();snackbar = true" class="m-auto" color="primary text-center" :disabled="validated">
                     send
                 </v-btn>
 
@@ -90,6 +105,9 @@ import {
 } from "vuex";
 export default {
     data: () => ({
+              snackbar: true,
+      text: 'Sent Successfully ',
+      timeout: 2222000,
         success:false,
         valid:true,
         dayOff: {
@@ -145,6 +163,7 @@ export default {
         ...mapGetters(["userInfo", "datOff", "response","items"]),
         validated:function(){
             let dayOffValues = Object.values(this.dayOff);
+            console.log(this.dayOff)
             let boolDayOffValues = dayOffValues.map(function(x){
                 return !!x;
             })
@@ -162,7 +181,7 @@ export default {
                 
                 this.$router.push({ name: 'user', params: { name: this.userInfo.name } })
                 this.success = false;
-            },1000)
+            },2000)
             
         }
     },

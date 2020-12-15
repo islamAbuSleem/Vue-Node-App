@@ -1,52 +1,122 @@
 <template>
-    <div>
-        {{$route.params.name || "null"}} 
-
-    <v-row
-    justify="end"
-    align="end"
-  >
-    <v-chip class="ma-2 " color="">{{+userInfo.normal + +userInfo.urgent}}</v-chip>
-             <v-chip class="ma-2 text-right" color="primary">الرصيد</v-chip>
-  </v-row>
-    <v-row
-    justify="end"
-    align="end"
-  >
-    <v-chip class="ma-2 " color="">{{+userInfo.normal}}</v-chip>
-             <v-chip class="ma-2 text-right" color="primary">الاعتيادي</v-chip>
-  </v-row>
-    <v-row
-    justify="end"
-    align="end"
-  >
-    <v-chip class="ma-2 " color="">{{ +userInfo.urgent}}</v-chip>
-             <v-chip class="ma-2 text-right" color="primary">العارضه</v-chip>
-  </v-row>
-       
-       <router-link class="text-right d-block mt-5" :to="{name: 'initialapprove'}" >موافقه مبدائيه</router-link>
-       <router-link class="text-right d-block mt-5" :to="{name: 'approve'}" >موافقه </router-link>
-       <router-link class="text-right d-block mt-5" :to="{name: 'hr-list'}" >HR List </router-link>
+  <v-container>
+    <v-row>
+      <v-col cols="4">
+        <v-card elevation="3" outlined class="text-center urgent">
+          <v-row justify="center" align="center">
+            <v-col>
+              <v-icon color="deep-orange lighten-2" class="icon"
+                >mdi-card-account-details-outline</v-icon
+              >
+            </v-col>
+            <v-col>
+              <v-card-title class="justify-center"> عارضه </v-card-title>
+              <v-card-subtitle class="headline pt-1">
+                {{ +userInfo.urgent }}</v-card-subtitle
+              >
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+      <v-col cols="4">
+        <v-card elevation="3" outlined class="text-center normal">
+          <v-row justify="center" align="center">
+            <v-col>
+              <v-icon color="amber accent-3" class="icon"
+                >mdi-card-account-details-outline</v-icon
+              >
+            </v-col>
+            <v-col>
+              <v-card-title class="justify-center"> اعتيادي </v-card-title>
+              <v-card-subtitle class="headline pt-1">
+                {{ +userInfo.normal }}</v-card-subtitle
+              >
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+      <v-col cols="4">
+        <v-card elevation="3" outlined class="text-center count">
+          <v-row justify="center" align="center">
+            <v-col>
+              <v-icon class="icon" color="green lighten-1"
+                >mdi-card-account-details-outline</v-icon
+              >
+            </v-col>
+            <v-col>
+              <v-card-title class="justify-center"> الرصيد </v-card-title>
+              <v-card-subtitle class="headline pt-1">
+                {{ +userInfo.urgent + +userInfo.normal }}</v-card-subtitle
+              >
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+    <div class="text-right">
+      <v-btn class="mx-1 ml-auto" color="warning" @click="messages = 0">
+        <router-link
+          class="text-right d-block approve-link"
+          :to="{ name: 'initialapprove' }"
+          >موافقه مبدائيه</router-link
+        >
+      </v-btn>
+      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0">
+        <router-link
+          class="text-right d-block approve-link"
+          :to="{ name: 'approve' }"
+          >موافقه
+        </router-link>
+      </v-btn>
+      <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0">
+        <router-link
+          class="text-right d-block approve-link"
+          :to="{ name: 'hr-list' }"
+          >HR List
+        </router-link>
+      </v-btn>
     </div>
+  </v-container>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-    data() {
-        return {
-          
-        }
-    },created() {
-        console.log("i'm here"+ " "+ this.userInfo.role)
-    },computed:{
-        ...mapGetters(["userInfo"])
-    }
-    
-}
-
+  data() {
+    return {};
+  },
+  created() {
+    console.log("i'm here" + " " + this.userInfo.role);
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
- 
+.headline {
+  font-size: 3.2rem !important;
+}
+.icon {
+  font-size: 3rem;
+}
+.count,
+.urgent,
+.normal {
+  border-left: 5px solid;
+}
+.count {
+  border-left-color: #66bb6a !important ;
+}
+.urgent {
+  border-left-color: #ff8a65;
+}
+.normal {
+  border-left-color: #ffc400;
+}
+.approve-link {
+  text-decoration: none;
+  color: #fff;
+}
 </style>
