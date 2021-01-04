@@ -1,11 +1,12 @@
 <template>
     <div dir="rtl">
+
 <v-btn color="success"><download-excel
   class="btn btn-default"
   :data="json_data"
   :fields="json_fields"
   worksheet="My Worksheet"
-  name="filename.xls"
+  :name="formatDate"
 >
   Download Excel
 </download-excel></v-btn>
@@ -67,18 +68,17 @@ import getDayOff from '../services/dayOffoperations';
 export default {
     data() {
         return {
-            teamDayOff: [],
-                  json_fields: {
-                      "userId":"userId",
-      "userName": "userName",
-      "startDate": "startDate",
-      "endDate": "endDate",
-      "period": "period",
-      "dept": "dept",
-      "doWorkName": "doWorkName",
-      "team": "team",
-      "returnDay": "returnDay",
-
+          teamDayOff: [],
+          json_fields: {
+          "userId":"userId",
+          "userName": "userName",
+          "startDate": "startDate",
+          "endDate": "endDate",
+          "period": "period",
+          "dept": "dept",
+          "doWorkName": "doWorkName",
+          "team": "team",
+          "returnDay": "returnDay",
     },json_data: []
     , json_meta: [
       [
@@ -95,7 +95,20 @@ export default {
         ...mapGetters(["userInfo"]),
         filterAccepted(){
             return this.teamDayOff.filter(i => i.status === 'accepted')
-        }
+        },
+        formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return `dayOff-${[year, month, day].join('-')}.xls`;
+}
     },
     created() {
         getDayOff.getAllDayOff().then(res =>{

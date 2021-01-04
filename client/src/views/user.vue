@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="12" sm="4">
         <v-card elevation="3" outlined class="text-center urgent">
           <v-row justify="center" align="center">
             <v-col>
@@ -18,7 +18,7 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="12" sm="4">
         <v-card elevation="3" outlined class="text-center normal">
           <v-row justify="center" align="center">
             <v-col>
@@ -35,7 +35,7 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="12" sm="4">
         <v-card elevation="3" outlined class="text-center count">
           <v-row justify="center" align="center">
             <v-col>
