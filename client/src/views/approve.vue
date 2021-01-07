@@ -26,6 +26,7 @@
        <!-- <p class="font-weight-bold"><span>يوم العوده: </span>{{user.returnDay}}</p>
         <p class="font-weight-bold"><span>تاريخ العوده: </span>{{user.returnDate}}</p>-->
         <p class="font-weight-bold"><span>سيقوم بالعمل بدلا مني: </span>{{user.doWorkName}}</p>
+        <p class="font-weight-bold green--text text--lighten-1 mt-5 text-center" v-if="user.teamLeader">{{user.teamLeader}}</p>
       </div>
     </v-card-text>
 
@@ -78,6 +79,7 @@ export default {
     },methods: {
         accept(id,user){
             user.status = "accepted";
+             user.manager =  `accepted by ${this.userInfo.name}`
             console.log(id,user)
             getDayOff.updateDayOffStatus(id,user).then(res =>{
                 console.log(res)

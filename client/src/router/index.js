@@ -9,6 +9,7 @@ import user from '../views/user.vue'
 import initialApprove from '../views/initialApprove.vue'
 import approve from '../views/approve.vue'
 import HR from '../views/hrGroup.vue'
+import userHistory from '../views/userHistory.vue'
 
 Vue.use(VueRouter)
 
@@ -61,6 +62,11 @@ const routes = [{
         path: '/hr-dayoff-list',
         name: 'hr-list',
         component: HR
+    },
+    {
+        path: '/user-history',
+        name: 'user-hisotry',
+        component: userHistory
     },
 ]
 

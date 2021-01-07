@@ -14,8 +14,10 @@ export default {
         return Api().get(`/api/dayOff/dept/${dept}`);
     },
     updateDayOffStatus(id, data) {
-        console.log(id, data)
         return Api().put(`/api/dayOff/${id}`, data);
+    },
+    getDayOfForUser(id) {
+        return Api().get(`/api/dayOff/userId/${id}`);
     },
     getAllDayOff() {
         return Api().get(`/api/dayOff`);

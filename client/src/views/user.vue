@@ -54,26 +54,17 @@
       </v-col>
     </v-row>
     <div class="text-right">
-      <v-btn class="mx-1 ml-auto" color="warning" @click="messages = 0">
-        <router-link
-          class="text-right d-block approve-link"
-          :to="{ name: 'initialapprove' }"
-          >موافقه مبدائيه</router-link
-        >
+      <v-btn class="mx-1 ml-auto" color="warning" @click="messages = 0 ; teamleaderAccept()">
+         موافقه مبدائيه
       </v-btn>
-      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0">
-        <router-link
-          class="text-right d-block approve-link"
-          :to="{ name: 'approve' }"
-          >موافقه
-        </router-link>
+      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0 ; mangerAccept()">
+       موافقه
       </v-btn>
-      <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0">
-        <router-link
-          class="text-right d-block approve-link"
-          :to="{ name: 'hr-list' }"
-          >HR List
-        </router-link>
+      <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0 ;hrList()">
+        HR List 
+      </v-btn>
+      <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0 ;history()">
+        Hisotry 
       </v-btn>
     </div>
   </v-container>
@@ -90,7 +81,20 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
-  },
+  },methods:{
+    hrList(){
+      this.$router.push({name: 'hr-list'})
+    },
+    mangerAccept(){
+      this.$router.push({name: 'approve'})
+    },
+    teamleaderAccept(){
+      this.$router.push({ name: 'initialapprove'})
+    },
+    history(){
+      this.$router.push({name: 'user-hisotry'})
+    }
+  }
 };
 </script>
 

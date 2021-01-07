@@ -47,10 +47,11 @@
                 <v-col cols="12" sm="6" class="ml-auto">
                   <v-text-field
                     label="اسم مقدم الطلب"
-                    v-model="dayOff.userName"
+                    v-model="userInfo.name"
                     :hint="userInfo.name"
                     justify-right
                     reverse
+                    readonly
                   ></v-text-field>
                 </v-col>
                     <v-col cols="12" sm="3" class="ml-auto">
@@ -249,6 +250,7 @@ export default {
   created() {
     this.dayOff.userId = this.userInfo.userId;
     this.dayOff.dept = this.userInfo.dept;
+    this.dayOff.userName = this.userInfo.name;
   },
   computed: {
     ...mapGetters(["userInfo", "datOff", "response", "items"]),

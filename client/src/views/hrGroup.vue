@@ -37,22 +37,41 @@
        <!-- <p class="font-weight-bold"><span>يوم العوده: </span>{{user.returnDay}}</p>
         <p class="font-weight-bold"><span>تاريخ العوده: </span>{{user.returnDate}}</p>-->
         <p class="font-weight-bold"><span>سيقوم بالعمل بدلا مني: </span>{{user.doWorkName}}</p>
+        <p class="font-weight-bold green--text text--lighten-1 mt-5 text-center" v-if="user.teamLeader"><span></span>{{user.teamLeader}}</p>
+        <p class="font-weight-bold green--text text--lighten-1 mt-5 text-center" v-if="user.manager"><span></span>{{user.manager}}</p>
+        <p class="font-weight-bold green--text text--lighten-1 mt-5 text-center" v-if="user.hrManager"><span></span>{{user.hrManager}}</p>
+
       </div>
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
 
 
-    <v-card-actions >
+    <v-card-actions v-if="!user.hrManager">
  
 
-           <v-btn
+ <!--          <v-btn
         color="green lighten-1 "
         text
         @click="done(user._id,user)"
         class="mr-auto"
       >
         done
+      </v-btn>-->
+       <v-btn
+        color="red lighten-2 "
+        text
+        @click="decline(user._id,user)"
+      >
+        Decline
+      </v-btn>
+           <v-btn
+        color="green lighten-1 "
+        text
+        @click="accept(user._id,user)"
+        class="mr-auto"
+      >
+        Approve
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -119,7 +138,8 @@ export default {
 
     },methods: {
         accept(id,user){
-            user.status = "inital accepted";
+            user.status = "accepted";
+            user.hrManager =  `accepted by ${this.userInfo.name}`
             console.log(id,user)
             getDayOff.updateDayOffStatus(id,user).then(res =>{
                 console.log(res)
@@ -133,7 +153,7 @@ export default {
             })
         },
         done(id,user){
-            user.status = "Done";
+            user.status = "accepted";
             console.log(id,user)
             getDayOff.updateDayOffStatus(id,user).then(res =>{
                 console.log(res)
