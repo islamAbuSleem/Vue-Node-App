@@ -84,5 +84,8 @@ computed: {
 .dayoff-history{
     width: 60%;
     margin: auto;
+    p{
+        word-break: break-word;
+    }
 }
 </style>

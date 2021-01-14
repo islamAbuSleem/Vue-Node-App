@@ -54,13 +54,16 @@
       </v-col>
     </v-row>
     <div class="text-right">
-      <v-btn class="mx-1 ml-auto" color="warning" @click="messages = 0 ; teamleaderAccept()">
+      <v-btn class="mx-1 ml-auto" color="warning" @click="messages = 0 ; teamleaderAccept()" v-if="userInfo.role == 'Team leader'">
          موافقه مبدائيه
       </v-btn>
-      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0 ; mangerAccept()">
+      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0 ; mangerAccept()" v-if="userInfo.role == 'Manager'">
        موافقه
       </v-btn>
-      <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0 ;hrList()">
+      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0 ; topMangerAccept()" v-if="userInfo.role == 'Top Manager'">
+       موافقه
+      </v-btn>
+      <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0 ;hrList()" v-if="userInfo.team == 'Hr'">
         HR List 
       </v-btn>
       <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0 ;history()">
@@ -93,6 +96,10 @@ export default {
     },
     history(){
       this.$router.push({name: 'user-hisotry'})
+    },
+    topMangerAccept(){
+      this.$router.push({name: 'topManager'})
+
     }
   }
 };
