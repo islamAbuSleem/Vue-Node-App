@@ -1,10 +1,22 @@
 const User = require('../../models/user');
+const helper = require('../../helper/functions')
 
 module.exports = function(router) {
 
 
     router.get('/user/:userId', function(req, res, next) {
         User.findById(req.params.userId).exec()
+            .then(docs => res.status(200)
+                .json(docs))
+            .catch(err => res.status(500).console.log(err)
+                .json({
+                    message: 'error finding user',
+                    error: err
+                }))
+
+    })
+    router.get('/user', function(req, res, next) {
+        User.find().exec()
             .then(docs => res.status(200)
                 .json(docs))
             .catch(err => res.status(500).console.log(err)
@@ -39,29 +51,37 @@ module.exports = function(router) {
     })
 
     router.post('/user', function(req, res) {
+
+        if (!helper.checkEmail(req.body.email)) { return res.send('Please enter a valid e-mail') }
+        if (!Number.isInteger(+req.body.userId)) { return res.send('Please enter a valid user id') }
+        if (!Number.isInteger(+req.body.normal)) { return res.send('Please enter a valid number in dayoff') }
+        if (!Number.isInteger(+req.body.urgent)) { return res.send('Please enter a valid number in dayoff') }
+        if (req.body.name.split(" ").length < 2) { return res.send('Please enter a valid username') }
+
         let user = new User();
         user.name = req.body.name,
             user.first = req.body.first,
             user.last = req.body.last,
             user.email = req.body.email,
-            user.password = req.body.password,
+            user.password = '12345678A',
             user.userId = req.body.userId,
             user.dept = req.body.dept,
             user.isactive = req.body.isactive,
             user.createdOn = req.body.createdOn,
-            user.normal = "15",
-            user.urgent = "6",
+            user.normal = req.body.normal,
+            user.urgent = req.body.urgent,
             user.team = req.body.team,
             user.role = req.body.role,
             user.save(function(err, user) {
                 if (err) {
                     console.log(err)
-                    return res.send('E-mail already exists')
+                    return res.send('User already exists')
                 } else {
                     console.log(user, 'save user successfully...');
                     return res.status(200).json(user)
                 }
             })
+
 
     })
 

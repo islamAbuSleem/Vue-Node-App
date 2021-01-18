@@ -45,6 +45,22 @@ module.exports = function(router) {
                     error: err
                 }))
     })
+    router.get('/dayOff/status/:status', function(req, res) {
+        DayOff.find({ 'status': req.params.status }).exec()
+            .then(docs => {
+                res.status(200)
+                    .json(docs)
+                console.log(res)
+            })
+            .catch(err => {
+                res.status(500)
+                    .json({
+                        message: 'error finding user',
+                        error: err
+                    })
+                console.log(err)
+            })
+    })
     router.get('/dayOff', function(req, res) {
         DayOff.find().exec()
             .then(docs => {
@@ -75,6 +91,10 @@ module.exports = function(router) {
             dayoff.returnDate = req.body.returnDate,
             dayoff.doWorkName = req.body.doWorkName,
             dayoff.team = req.body.team,
+            dayoff.teamLeader = '',
+            dayoff.manager = '',
+            dayoff.topManager = '',
+            dayoff.hrManager = '',
             dayoff.status = req.body.status,
             dayoff.save(function(err, dayoff) {
                 if (err) { return console.log(err); } else {

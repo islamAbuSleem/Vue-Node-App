@@ -12,6 +12,10 @@ let dayOffSchema = new Schema({
     doWorkName: { type: String, required: true },
     userId: { type: String, required: true },
     dept: { type: String, required: true },
+    teamLeader: { type: String },
+    manager: { type: String },
+    topManager: { type: String },
+    hrManager: { type: String },
     team: { type: String },
     status: { type: String },
 });

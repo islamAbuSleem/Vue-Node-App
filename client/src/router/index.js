@@ -9,6 +9,10 @@ import user from '../views/user.vue'
 import initialApprove from '../views/initialApprove.vue'
 import approve from '../views/approve.vue'
 import HR from '../views/hrGroup.vue'
+import topManager from '../views/topManagerApprove.vue'
+import userHistory from '../views/userHistory.vue'
+import HrDashboard from '../views/hrDashboard.vue'
+// import editUser from '../components/editUser.vue'
 
 Vue.use(VueRouter)
 
@@ -29,7 +33,7 @@ const routes = [{
     // },
 
     {
-        path: '/register',
+        path: '/create-user',
         name: 'register',
         component: register
     },
@@ -62,6 +66,26 @@ const routes = [{
         name: 'hr-list',
         component: HR
     },
+    {
+        path: '/user-history',
+        name: 'user-hisotry',
+        component: userHistory
+    },
+    {
+        path: '/top-manager-approve',
+        name: 'topManager',
+        component: topManager
+    },
+    {
+        path: '/hr-dashboard',
+        name: 'HrDashboard',
+        component: HrDashboard
+    },
+    // {
+    //     path: '/edit-user',
+    //     name: 'editUser',
+    //     component: editUser,
+    // },
 ]
 
 const router = new VueRouter({

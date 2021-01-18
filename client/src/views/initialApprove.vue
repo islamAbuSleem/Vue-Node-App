@@ -77,6 +77,7 @@ export default {
     },methods: {
         accept(id,user){
             user.status = "inital accepted";
+            user.teamLeader = `accepted by ${this.userInfo.name}`
             console.log(id,user)
             getDayOff.updateDayOffStatus(id,user).then(res =>{
                 console.log(res)
