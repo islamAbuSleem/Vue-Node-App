@@ -1,5 +1,6 @@
 <template>
   <div class="vac" dir="rtl">
+    <p v-if="feedback" class="text-center red--text">{{feedback}}</p>
     <template>
       <div class="text-center">
         <v-snackbar
@@ -32,7 +33,7 @@
                     reverse
                   ></v-text-field>
                 </v-col>
-                <v-col class="d-flex" cols="12" sm="4">
+                <v-col class="d-flex" cols="12" sm="4" dir="ltr">
                   <v-select :items="items" label="اجازه" v-model="dayOff.offType" reverse >
                   </v-select>
                 </v-col>
@@ -198,6 +199,7 @@ import { mapGetters,mapActions } from "vuex";
 
 export default {
   data: () => ({
+    feedback:null,
     snackbar: false,
     text: "Sent Successfully ",
     timeout: 3000,
@@ -255,16 +257,23 @@ export default {
     ...mapGetters(["userInfo", "datOff", "response", "items"]),
     validated: function () {
       let dayOffValues = Object.values(this.dayOff);
-      console.log(this.dayOff);
       let boolDayOffValues = dayOffValues.map(function (x) {
         return !!x;
       });
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.valid = boolDayOffValues.includes(false);
-      console.log(boolDayOffValues.includes(false));
       return this.valid;
     },
   },
+  watch: {
+  dayOff: {
+     handler(){
+      this.quarterDayDate();
+      this.quarterDayCheckAvailability()
+     },
+     deep: true
+  }
+},
   methods: {
     ...mapActions(["send"]),
     sentSuccess() {
@@ -274,6 +283,32 @@ export default {
         this.success = false;
       }, 2000);
     },
+     dateToYMD(date) {
+    var d = date.getDate();
+    var m = date.getMonth() + 1; //Month from 0 to 11
+    var y = date.getFullYear();
+    return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+}
+,quarterDayDate(){
+   // do stuff
+       if(this.dayOff.offType == this.items[2]){
+          this.dayOff.endDate = this.dayOff.startDate
+          let x = this.dateToYMD(new Date(+new Date(this.dayOff.startDate) + (24 * 3600 * 1000)))
+          if(this.dayOff.startDate == ''){
+             this.dayOff.returnDate = ''
+          }else{
+          this.dayOff.returnDate = x
+          }
+        }
+}
+,quarterDayCheckAvailability(){
+        if(this.dayOff.offType == this.items[2]){
+        if(this.userInfo.quarterDay == '0'){
+        this.dayOff.offType = this.items[0];
+        this.feedback = 'لقد استخدمت اليوم الاداري بالفعل سيتم احتساب الاجازه من الاعتيادي'
+      }
+      }
+}
   },
 };
 </script>

@@ -1,7 +1,24 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="4">
+      <v-col cols="12" sm="3">
+        <v-card elevation="3" outlined class="text-center urgent">
+          <v-row justify="center" align="center">
+            <v-col>
+              <v-icon color="deep-orange lighten-2" class="icon"
+                >mdi-card-account-details-outline</v-icon
+              >
+            </v-col>
+            <v-col>
+              <v-card-title class="justify-center"> اداري </v-card-title>
+              <v-card-subtitle class="headline pt-1">
+                {{ +userInfo.quarterDay }}</v-card-subtitle
+              >
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="3">
         <v-card elevation="3" outlined class="text-center urgent">
           <v-row justify="center" align="center">
             <v-col>
@@ -18,7 +35,7 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4">
+      <v-col cols="12" sm="3">
         <v-card elevation="3" outlined class="text-center normal">
           <v-row justify="center" align="center">
             <v-col>
@@ -35,7 +52,7 @@
           </v-row>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4">
+      <v-col cols="12" sm="3">
         <v-card elevation="3" outlined class="text-center count">
           <v-row justify="center" align="center">
             <v-col>

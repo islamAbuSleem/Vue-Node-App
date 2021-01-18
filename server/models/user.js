@@ -7,6 +7,7 @@ let userSchema = new Schema({
     name: { type: String },
     normal: { type: String },
     urgent: { type: String },
+    quarterDay: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isactive: { type: Boolean, default: true },

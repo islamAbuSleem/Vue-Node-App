@@ -207,9 +207,6 @@ let dummy = {};
           delete dummy.feedback;
           delete dummy.check;
       let userValues = Object.values(dummy);
-      console.log(dummy);
-      console.log(this.userInfo);
-      console.log(userValues)
       let boolUserValues = userValues.map(function (x) {
         return !!x;
       });

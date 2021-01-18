@@ -5,6 +5,6 @@ export default {
         return Api().post('/api/user', credentials);
     },
     login(credentials) {
-        return Api().get(`/api/user/email/${credentials.email}`)
+        return Api().post(`/api/user/login`, credentials)
     }
 }

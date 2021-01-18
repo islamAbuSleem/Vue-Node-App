@@ -93,6 +93,8 @@ export default {
                 this.userInfo.normal = +this.userInfo.normal - +user.period
             }else if(user.offType == this.items[1]){
                 this.userInfo.urgent = +this.userInfo.urgent - +user.period
+            }else if(user.offType == this.items[2]){
+                this.userInfo.quarterDay = 0
             }
             getDayOff.updateDayOffCount(user.userId,this.userInfo).then(res => {
                 console.log(res)

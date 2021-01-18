@@ -22,7 +22,9 @@ app.use((req, res, next) => {
     res.json(err)
 });
 mongoose.connect('mongodb://localhost:27017/workflow', { useNewUrlParser: true, useUnifiedTopology: true });
-
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 // 'mongodb+srv://islam:islam123@cluster0.ou5fv.mongodb.net/workflow?retryWrites=true&w=majority'
 // 'mongodb://localhost:27017/workflow'
 const db = mongoose.connection;
@@ -31,6 +33,7 @@ db.once('open', function() {
     console.log('connected to mongodb');
 });
 app.listen(app.get('port'), function() {
-    console.log('API SERVER LISTEN ON PORT ' + process.env.PORT)
+    console.log('API SERVER LISTEN ON PORT ' + PORT)
 });
-app.listen(process.env.PORT || 8081);
+const PORT = process.env.PORT || 8081
+app.listen(PORT);

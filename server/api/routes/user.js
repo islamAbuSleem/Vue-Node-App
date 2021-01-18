@@ -1,5 +1,9 @@
 const User = require('../../models/user');
-const helper = require('../../helper/functions')
+const bcrypt = require('bcrypt');
+const helper = require('../../helper/functions');
+
+
+const saltRounds = 10;
 
 module.exports = function(router) {
 
@@ -27,30 +31,55 @@ module.exports = function(router) {
 
     })
     router.get('/user/userId/:userId', function(req, res) {
-        User.find({ 'userId': req.params.userId }).exec()
-            .then(docs => res.status(200)
-                .json(docs))
-            .catch(err => res.status(500)
-                .json({
-                    message: 'error finding user',
-                    error: err
-                }))
-    })
-    router.get('/user/email/:email', function(req, res) {
-        User.find({ 'email': req.params.email }).exec()
-            .then(docs => {
-                res.status(200)
-                    .json(docs)
-                console.log(docs[0].email)
+            User.find({ 'userId': req.params.userId }).exec()
+                .then(docs => res.status(200)
+                    .json(docs))
+                .catch(err => res.status(500)
+                    .json({
+                        message: 'error finding user',
+                        error: err
+                    }))
+        })
+        // router.post('/user/email/:email', function(req, res) {
+        //     User.find({ 'email': req.params.email }).exec()
+        //         .then(docs => {
+        //             res.status(200)
+        //                 .json(docs)
+        //             console.log(req.body)
+        //         })
+        //         .catch(err => res.status(500)
+        //             .json({
+        //                 message: 'error finding user',
+        //                 error: err
+        //             }))
+        // })
+
+    router.post('/user/login/', async(req, res) => {
+        const { email, password } = req.body
+        await User.find({ email }).exec().then(docs => {
+                bcrypt.compare(password, docs[0].password).then(function(result) {
+                    if (result) {
+                        res.status(200)
+                            .json(docs)
+                    } else {
+                        return res.send("invalid password")
+                    }
+                });
+                // console.log(password === docs[0].password)
+
             })
-            .catch(err => res.status(500)
-                .json({
-                    message: 'error finding user',
-                    error: err
-                }))
+            .catch(err => {
+
+                return res.status(404)
+                    .json({
+                        message: 'error finding user',
+                        error: err
+                    })
+            })
     })
 
-    router.post('/user', function(req, res) {
+
+    router.post('/user', async function(req, res) {
 
         if (!helper.checkEmail(req.body.email)) { return res.send('Please enter a valid e-mail') }
         if (!Number.isInteger(+req.body.userId)) { return res.send('Please enter a valid user id') }
@@ -58,18 +87,22 @@ module.exports = function(router) {
         if (!Number.isInteger(+req.body.urgent)) { return res.send('Please enter a valid number in dayoff') }
         if (req.body.name.split(" ").length < 2) { return res.send('Please enter a valid username') }
 
+        const password = '12345678A';
+        // const hash = await bcrypt.hash(req.body.password, saltRounds);
+        const hash = await bcrypt.hash(password, saltRounds);
         let user = new User();
         user.name = req.body.name,
             user.first = req.body.first,
             user.last = req.body.last,
             user.email = req.body.email,
-            user.password = '12345678A',
+            user.password = hash,
             user.userId = req.body.userId,
             user.dept = req.body.dept,
             user.isactive = req.body.isactive,
             user.createdOn = req.body.createdOn,
             user.normal = req.body.normal,
             user.urgent = req.body.urgent,
+            user.quarterDay = "1",
             user.team = req.body.team,
             user.role = req.body.role,
             user.save(function(err, user) {
