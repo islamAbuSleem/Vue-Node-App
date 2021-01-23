@@ -34,11 +34,11 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="2">
-            <v-text-field v-model="userInfo.normal" label="اعتيادي" required>
+            <v-text-field v-model="userInfo.annualNormal" label="اعتيادي" required>
             </v-text-field>
           </v-col>
           <v-col cols="12" sm="2">
-            <v-text-field v-model="userInfo.urgent" label="عارضه" required>
+            <v-text-field v-model="userInfo.annualUrgent" label="عارضه" required>
             </v-text-field>
           </v-col>
         </v-row>
@@ -148,9 +148,11 @@ export default {
         feedback: "",
         check: false,
         isactive: true,
-        createdOn: Date.now().toString(),
+        createdOn: new Date(),
         normal: "",
         urgent: "",
+        annualNormal: "",
+        annualUrgent: "6",
         role: "",
         team: "",
       },
@@ -192,7 +194,6 @@ export default {
           this.userInfo.feedback = res.data;
         }
 
-        console.log(res.status);
       });
       console.log(JSON.stringify(this.userInfo));
 
@@ -206,6 +207,8 @@ let dummy = {};
 
           delete dummy.feedback;
           delete dummy.check;
+          delete dummy.normal;
+          delete dummy.urgent;
       let userValues = Object.values(dummy);
       let boolUserValues = userValues.map(function (x) {
         return !!x;

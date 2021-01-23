@@ -196,9 +196,12 @@
 
 <script>
 import { mapGetters,mapActions } from "vuex";
+import {renewDayOff} from '../mixins/renewDayOff'
 
 export default {
+  mixins:[renewDayOff],
   data: () => ({
+    now: new Date(),
     feedback:null,
     snackbar: false,
     text: "Sent Successfully ",
@@ -247,11 +250,13 @@ export default {
     x.getDay();
     this.dayOff.returnDay = this.days[x.getDay()];
     this.dayOff.team = this.userInfo.team;
+    
   },
   created() {
     this.dayOff.userId = this.userInfo.userId;
     this.dayOff.dept = this.userInfo.dept;
     this.dayOff.userName = this.userInfo.name;
+
   },
   computed: {
     ...mapGetters(["userInfo", "datOff", "response", "items"]),
@@ -263,6 +268,7 @@ export default {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.valid = boolDayOffValues.includes(false);
       return this.valid;
+      
     },
   },
   watch: {
@@ -282,33 +288,34 @@ export default {
         this.$router.push({ name: "user", params: { name: this.userInfo.name } });
         this.success = false;
       }, 2000);
-    },
-     dateToYMD(date) {
-    var d = date.getDate();
-    var m = date.getMonth() + 1; //Month from 0 to 11
-    var y = date.getFullYear();
-    return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
-}
-,quarterDayDate(){
-   // do stuff
-       if(this.dayOff.offType == this.items[2]){
-          this.dayOff.endDate = this.dayOff.startDate
-          let x = this.dateToYMD(new Date(+new Date(this.dayOff.startDate) + (24 * 3600 * 1000)))
-          if(this.dayOff.startDate == ''){
-             this.dayOff.returnDate = ''
-          }else{
-          this.dayOff.returnDate = x
-          }
-        }
-}
-,quarterDayCheckAvailability(){
-        if(this.dayOff.offType == this.items[2]){
-        if(this.userInfo.quarterDay == '0'){
-        this.dayOff.offType = this.items[0];
-        this.feedback = 'لقد استخدمت اليوم الاداري بالفعل سيتم احتساب الاجازه من الاعتيادي'
-      }
-      }
-}
+    },quarterDayDate(){
+      // do stuff
+          if(this.dayOff.offType == this.items[2]){
+              this.dayOff.endDate = this.dayOff.startDate
+              let x = this.dateToYMD(new Date(+new Date(this.dayOff.startDate) + (24 * 3600 * 1000)))
+              if(this.dayOff.startDate == ''){
+                this.dayOff.returnDate = ''
+              }else{
+              this.dayOff.returnDate = x
+
+              // here if will increment start date by 1 until start date be come greater than  now by 1 then
+              // make return date = start date + 1
+              if(this.dayOff.startDate <= this.dateToYMD(this.now)){
+                this.dayOff.startDate = x
+              }
+              }
+
+              
+            }
+    }
+    ,quarterDayCheckAvailability(){
+            if(this.dayOff.offType == this.items[2]){
+            if(this.userInfo.quarterDay == '0'){
+            this.dayOff.offType = this.items[0];
+            this.feedback = 'لقد استخدمت اليوم الاداري بالفعل سيتم احتساب الاجازه من الاعتيادي'
+           }
+       }
+    }
   },
 };
 </script>

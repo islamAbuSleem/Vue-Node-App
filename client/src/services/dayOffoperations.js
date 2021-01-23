@@ -4,7 +4,6 @@ export default {
         return Api().post('/api/dayOff', credentials);
     },
     updateDayOffCount(id, count) {
-        console.log(id, count)
         return Api().put(`/api/user/userId/${id}`, count);
     },
     getDayOffForInitalApprove(team) {

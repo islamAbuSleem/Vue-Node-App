@@ -23,7 +23,9 @@ export default {
   },
   computed:{
     ...mapGetters(["isLoggedIn"])
-  }
+  },created() {
+    
+  },
 };
 </script>
 

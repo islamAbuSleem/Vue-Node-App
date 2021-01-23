@@ -92,12 +92,20 @@
 
 <script>
 import { mapGetters } from "vuex";
+import {renewDayOff} from '../mixins/renewDayOff'
+import getDayOff from '../services/dayOffoperations';
+
 export default {
+  mixins:[renewDayOff],
   data() {
-    return {};
+    return {
+       now: new Date(),
+    };
   },
   created() {
-    console.log("i'm here" + " " + this.userInfo.role);
+    this.quarterDayRenew()
+    this.annualDayOffRenew()
+    this.calculateDayoffCount()
   },
   computed: {
     ...mapGetters(["userInfo"]),
@@ -116,6 +124,46 @@ export default {
     },
     topMangerAccept(){
       this.$router.push({name: 'topManager'})
+
+    },quarterDayRenew(){
+      if(
+        this.dateToYMD(this.now) == this.dateToYMD(new Date(`${this.now.getFullYear()}-01-01`)) ||
+        this.dateToYMD(this.now) == this.dateToYMD(new Date(`${this.now.getFullYear()}-04-01`)) ||
+        this.dateToYMD(this.now) == this.dateToYMD(new Date(`${this.now.getFullYear()}-07-01`)) ||
+        this.dateToYMD(this.now) == this.dateToYMD(new Date(`${this.now.getFullYear()}-10-01`)) 
+        ){
+         this.userInfo.quarterDay = 1
+           getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo)
+      }
+    },
+    annualDayOffRenew(){
+     if((new Date(this.now).getMonth() + 1) == 1){
+          this.userInfo.normal = this.userInfo.annualNormal;
+          this.userInfo.urgent = this.userInfo.annualUrgent;
+           getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo)
+        }
+    },
+    calculateDayoffCount(){
+
+      const createdOn = new Date(this.userInfo.createdOn)
+      
+      const workingDuration = Math.floor(Math.abs(createdOn - this.now)/ (1000 * 60 * 60 * 24*30))
+      const normalPerMonth = this.userInfo.annualNormal / 12
+      const urgentPerMonth = this.userInfo.annualUrgent / 12
+      const yearRemainingDays = Math.floor(Math.abs(new Date(`${this.now.getFullYear()}-12-31`) - this.now)/ (1000 * 60 * 60 * 24*30))
+      if(workingDuration <= 6){
+        this.userInfo.normal = ''
+        this.userInfo.urgent = ''
+      }else{
+        if((new Date(this.now).getMonth() + 1) == 1){
+          this.annualDayOffRenew()
+        }else{
+                    this.userInfo.normal = normalPerMonth  * yearRemainingDays
+          this.userInfo.urgent = urgentPerMonth * yearRemainingDays
+        }
+
+      }
+    getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo).then(res => console.log(res))
 
     }
   }
