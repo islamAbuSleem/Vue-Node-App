@@ -126,7 +126,7 @@ export default {
         } else if (user.offType == this.items[2]) {
           this.userData.quarterDay = 0;
         }
-        getDayOff.updateDayOffCount(user.userId, this.userData);
+        getDayOff.updateDayOffCount(user.userId, this.userData)
       });
     },
     decline(id, user) {

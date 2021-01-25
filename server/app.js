@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const api = require('./api');
 const morgan = require('morgan');
+// const session = require('express-session');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -16,6 +17,14 @@ app.use(cors());
 app.use('/api', api);
 app.use(express.static('static'));
 app.use(morgan('dev'));
+// app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false }))
+// app.use(session({
+//     secret: 'secretKey',
+//     resave: true,
+//     saveUninitialized: true,
+//     cookie: { secure: true }
+// }))
+
 app.use((req, res, next) => {
     const err = new Error('not found');
     err.status = 404;

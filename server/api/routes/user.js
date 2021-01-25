@@ -57,25 +57,21 @@ module.exports = function(router) {
     router.post('/user/login/', async(req, res) => {
         const { email, password } = req.body
         await User.find({ email }).exec().then(docs => {
-                bcrypt.compare(password, docs[0].password).then(function(result) {
-                    if (result) {
-                        res.status(200)
-                            .json(docs)
-                    } else {
-                        return res.send("invalid password")
-                    }
-                });
-                // console.log(password === docs[0].password)
-
-            })
-            .catch(err => {
-
-                return res.status(404)
-                    .json({
-                        message: 'error finding user',
-                        error: err
-                    })
-            })
+            bcrypt.compare(password, docs[0].password).then(function(result) {
+                if (result) {
+                    res.status(200)
+                    res.json(docs)
+                } else {
+                    return res.send("invalid password")
+                }
+            });
+        }).catch(err => {
+            return res.status(404)
+                .json({
+                    message: 'error finding user',
+                    error: err
+                })
+        })
     })
 
 

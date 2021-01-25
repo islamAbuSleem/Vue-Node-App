@@ -21,10 +21,6 @@ const actions = {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (re.test(String(credentials.email).toLowerCase())) {
             authService.login(credentials).then((res) => {
-                console.log(res)
-
-
-
                 if (
                     // credentials.email == res.data[0].email &&
                     // credentials.password == res.data[0].password
