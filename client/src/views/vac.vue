@@ -1,5 +1,6 @@
 <template>
   <div class="vac" dir="rtl">
+    <p v-if="feedback" class="text-center red--text">{{feedback}}</p>
     <template>
       <div class="text-center">
         <v-snackbar
@@ -32,7 +33,7 @@
                     reverse
                   ></v-text-field>
                 </v-col>
-                <v-col class="d-flex" cols="12" sm="4">
+                <v-col class="d-flex" cols="12" sm="4" dir="ltr">
                   <v-select :items="items" label="اجازه" v-model="dayOff.offType" reverse >
                   </v-select>
                 </v-col>
@@ -195,9 +196,13 @@
 
 <script>
 import { mapGetters,mapActions } from "vuex";
+import {renewDayOff} from '../mixins/renewDayOff'
 
 export default {
+  mixins:[renewDayOff],
   data: () => ({
+    now: new Date(),
+    feedback:null,
     snackbar: false,
     text: "Sent Successfully ",
     timeout: 3000,
@@ -245,26 +250,36 @@ export default {
     x.getDay();
     this.dayOff.returnDay = this.days[x.getDay()];
     this.dayOff.team = this.userInfo.team;
+    
   },
   created() {
     this.dayOff.userId = this.userInfo.userId;
     this.dayOff.dept = this.userInfo.dept;
     this.dayOff.userName = this.userInfo.name;
+
   },
   computed: {
     ...mapGetters(["userInfo", "datOff", "response", "items"]),
     validated: function () {
       let dayOffValues = Object.values(this.dayOff);
-      console.log(this.dayOff);
       let boolDayOffValues = dayOffValues.map(function (x) {
         return !!x;
       });
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.valid = boolDayOffValues.includes(false);
-      console.log(boolDayOffValues.includes(false));
       return this.valid;
+      
     },
   },
+  watch: {
+  dayOff: {
+     handler(){
+      this.quarterDayDate();
+      this.quarterDayCheckAvailability()
+     },
+     deep: true
+  }
+},
   methods: {
     ...mapActions(["send"]),
     sentSuccess() {
@@ -273,7 +288,34 @@ export default {
         this.$router.push({ name: "user", params: { name: this.userInfo.name } });
         this.success = false;
       }, 2000);
-    },
+    },quarterDayDate(){
+      // do stuff
+          if(this.dayOff.offType == this.items[2]){
+              this.dayOff.endDate = this.dayOff.startDate
+              let x = this.dateToYMD(new Date(+new Date(this.dayOff.startDate) + (24 * 3600 * 1000)))
+              if(this.dayOff.startDate == ''){
+                this.dayOff.returnDate = ''
+              }else{
+              this.dayOff.returnDate = x
+
+              // here if will increment start date by 1 until start date be come greater than  now by 1 then
+              // make return date = start date + 1
+              if(this.dayOff.startDate <= this.dateToYMD(this.now)){
+                this.dayOff.startDate = x
+              }
+              }
+
+              
+            }
+    }
+    ,quarterDayCheckAvailability(){
+            if(this.dayOff.offType == this.items[2]){
+            if(this.userInfo.quarterDay == '0'){
+            this.dayOff.offType = this.items[0];
+            this.feedback = 'لقد استخدمت اليوم الاداري بالفعل سيتم احتساب الاجازه من الاعتيادي'
+           }
+       }
+    }
   },
 };
 </script>
