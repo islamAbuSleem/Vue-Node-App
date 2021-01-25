@@ -21,14 +21,15 @@ const actions = {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (re.test(String(credentials.email).toLowerCase())) {
             authService.login(credentials).then((res) => {
+                console.log(res)
                 if (
                     // credentials.email == res.data[0].email &&
                     // credentials.password == res.data[0].password
                     res.data !== "invalid password"
                 ) {
-                    commit('setUserInfo', res.data[0])
-                    commit('setToken', res.data[0]._id)
-                    window.localStorage.setItem("userInfo", JSON.stringify(res.data[0]))
+                    commit('setUserInfo', res.data.docs[0])
+                    commit('setToken', res.data.token)
+                    window.localStorage.setItem("userInfo", JSON.stringify(res.data.docs[0]))
                     credentials.feedback = "";
                     credentials.check = false;
 

@@ -1,7 +1,8 @@
 const User = require('../../models/user');
 const bcrypt = require('bcrypt');
 const helper = require('../../helper/functions');
-
+const jwt = require('jsonwebtoken');
+const router = require('..');
 
 const saltRounds = 10;
 
@@ -59,8 +60,12 @@ module.exports = function(router) {
         await User.find({ email }).exec().then(docs => {
             bcrypt.compare(password, docs[0].password).then(function(result) {
                 if (result) {
+                    const token = jwt.sign({
+                        email: docs.email,
+                        userId: docs._id
+                    }, 'secret', { expiresIn: '2h' })
                     res.status(200)
-                    res.json(docs)
+                    res.json({ docs, token })
                 } else {
                     return res.send("invalid password")
                 }
@@ -129,5 +134,7 @@ module.exports = function(router) {
             })
         })
     })
-
+    router.route('/hr-dashboard').get((req, res, next) => {
+        res.redirect('/')
+    })
 }
