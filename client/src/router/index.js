@@ -12,7 +12,7 @@ import HR from '../views/hrGroup.vue'
 import topManager from '../views/topManagerApprove.vue'
 import userHistory from '../views/userHistory.vue'
 import HrDashboard from '../views/hrDashboard.vue'
-// import editUser from '../components/editUser.vue'
+import PageNotFound from '../views/PageNotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -146,17 +146,18 @@ const routes = [{
         name: 'user-hisotry',
         component: userHistory
     }, {
-        path: '/top-manager-approve',
+        path: '/sector-manager-approve',
         name: 'topManager',
         component: topManager,
         meta: {
             requiresAuth: true,
-            role: 'Top Manager'
+            role: 'Top Manager',
+            dept: 'Sector'
         },
         beforeEnter: (to, from, next) => {
 
-            if (to.matched.some(record => record.meta.role)) {
-                if (userinfo.role == 'Top Manager') {
+            if (to.matched.some(record => (record.meta.role, record.meta.dept))) {
+                if (userinfo.role == 'Manager' && userinfo.dept == 'Sector') {
                     next()
                 } else {
                     next({ name: 'user', params: { name: userinfo.name } })
@@ -188,6 +189,10 @@ const routes = [{
         }
 
     },
+    {
+        path: "*",
+        component: PageNotFound
+    }
 ]
 
 const router = new VueRouter({

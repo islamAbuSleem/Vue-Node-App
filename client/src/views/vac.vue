@@ -1,6 +1,15 @@
 <template>
   <div class="vac" dir="rtl">
-    <p v-if="feedback" class="text-center red--text">{{feedback}}</p>
+    <!-- <p v-if="feedback" class="text-center red--text feedback">{{feedback}}</p> -->
+        <v-alert
+      prominent
+      
+      type="info"
+      v-if="feedback"
+      class="text-center feedback"
+    >
+     {{feedback}}
+    </v-alert>
     <template>
       <div class="text-center">
         <v-snackbar
@@ -233,29 +242,18 @@ export default {
     },
   }),
   beforeUpdate() {
-    const date1 = new Date(this.dayOff.startDate);
-    const date2 = new Date(this.dayOff.endDate);
-    if (date2 < date1) {
-      this.dayOff.period = "inValid";
-    } else {
-      const diffTime = Math.abs(date2 - date1);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      if (isNaN(diffTime)) {
-        this.dayOff.period = "";
-      } else {
-        this.dayOff.period = diffDays + 1;
-      }
-    }
-    let x = new Date(this.dayOff.returnDate);
-    x.getDay();
-    this.dayOff.returnDay = this.days[x.getDay()];
-    this.dayOff.team = this.userInfo.team;
-    
+      this.calcStartAndEndDate()
+      this.calcReturnDate()
+      this.calcReturnDay()
   },
   created() {
     this.dayOff.userId = this.userInfo.userId;
     this.dayOff.dept = this.userInfo.dept;
     this.dayOff.userName = this.userInfo.name;
+    if(this.userInfo.role == "Manager"){
+        this.dayOff.status = "accepted by manager";
+        this.dayOff.manager = `accepted by ${this.userInfo.name}`;
+    }
 
   },
   computed: {
@@ -276,8 +274,18 @@ export default {
      handler(){
       this.quarterDayDate();
       this.quarterDayCheckAvailability()
+      this.normalDayOffAvailability()
+      this.urgentDayOffAvailability()
+      this.halfDay()
      },
      deep: true
+  },
+  feedback:{
+    handler(){
+      setTimeout(()=>{
+        this.feedback = null
+      },15000)
+    }
   }
 },
   methods: {
@@ -303,18 +311,81 @@ export default {
               if(this.dayOff.startDate <= this.dateToYMD(this.now)){
                 this.dayOff.startDate = x
               }
-              }
-
-              
+              }            
             }
     }
     ,quarterDayCheckAvailability(){
             if(this.dayOff.offType == this.items[2]){
             if(this.userInfo.quarterDay == '0'){
-            this.dayOff.offType = this.items[0];
             this.feedback = 'لقد استخدمت اليوم الاداري بالفعل سيتم احتساب الاجازه من الاعتيادي'
+            setTimeout(()=>{
+              this.dayOff.offType = this.items[0];
+            },5000)
            }
        }
+    }
+    ,normalDayOffAvailability(){
+       if(this.dayOff.offType == this.items[0]){
+         if(this.userInfo.normal <= '0'){
+            this.feedback = 'ليس لديك رصيد اعتيادي سيتم الخصم من المرتب '
+         }
+       }
+    }
+    ,urgentDayOffAvailability(){
+       if(this.dayOff.offType == this.items[1]){
+         if(this.userInfo.urgent <= '0'){
+            this.feedback = 'ليس لديك رصيد عارضه سيتم الخصم من المرتب '
+         }
+       }
+    },
+    halfDay(){
+                if(this.dayOff.offType == this.items[4]){
+              this.dayOff.endDate = this.dayOff.startDate
+              let x = this.dateToYMD(new Date(+new Date(this.dayOff.startDate) + (24 * 3600 * 1000)))
+              if(this.dayOff.startDate == ''){
+                this.dayOff.returnDate = ''
+              }else{
+              this.dayOff.returnDate = this.dayOff.startDate
+              // here if will increment start date by 1 until start date be come greater than  now by 1 then
+              // make return date = start date + 1
+              if(this.dayOff.startDate < this.dateToYMD(this.now)){
+                this.dayOff.startDate = x
+              }
+              }            
+            }
+    },
+    calcStartAndEndDate(){
+          const date1 = new Date(this.dayOff.startDate);
+    const date2 = new Date(this.dayOff.endDate);
+    if (date2 < date1) {
+      this.dayOff.period = "inValid";
+      this.dayOff.returnDate = ''
+    }else if(this.dayOff.offType == this.items[4]){
+        this.dayOff.period = "0.5"
+    } else {
+      const diffTime = Math.abs(date2 - date1);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (isNaN(diffTime)) {
+        this.dayOff.period = "";
+      } else {
+        this.dayOff.period = diffDays + 1;
+      }
+    }
+    },
+    calcReturnDate(){
+           let inc_endDate = this.dateToYMD(new Date(+new Date(this.dayOff.endDate) + (24 * 3600 * 1000)))
+     if(this.dayOff.endDate == ''){
+       this.dayOff.returnDate = ''
+     }else{
+    this.dayOff.returnDate = inc_endDate
+
+     }
+    },
+    calcReturnDay(){
+    let x = new Date(this.dayOff.returnDate);
+    x.getDay();
+    this.dayOff.returnDay = this.days[x.getDay()];
+    this.dayOff.team = this.userInfo.team;
     }
   },
 };
@@ -335,6 +406,18 @@ export default {
   .modal {
     background: rgba(0, 0, 0, 0.2);
     z-index: 999;
+  }
+  .feedback{
+    // background-color: rgb(119, 149, 241);
+    width: 20%;
+    margin: auto;
+    // padding: 5px;
+    // border-radius: 4px;
+    position: fixed;
+    right: 1%;
+    bottom: 7%;
+    z-index: 59;
+    opacity: .7;
   }
 }
 </style>
