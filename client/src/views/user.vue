@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container >
     <v-row>
       <v-col cols="12" sm="3">
         <v-card elevation="3" outlined class="text-center urgent">
@@ -100,6 +100,8 @@ export default {
   data() {
     return {
        now: new Date(),
+       x:null,
+       y:null
     };
   },
    created() {
@@ -186,7 +188,7 @@ export default {
         }
       }
     },
-  }
+    }
 };
 </script>
 

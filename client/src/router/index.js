@@ -172,13 +172,12 @@ const routes = [{
         component: HrDashboard,
         meta: {
             requiresAuth: true,
-            role: 'Manager',
             team: 'HR'
         },
         beforeEnter: (to, from, next) => {
 
-            if (to.matched.some(record => (record.meta.role, record.meta.team))) {
-                if (userinfo.role == 'Manager' && userinfo.team == 'HR') {
+            if (to.matched.some(record => (record.meta.team))) {
+                if (userinfo.team == 'HR') {
                     next()
                 } else {
                     next({ name: 'user', params: { name: userinfo.name } })

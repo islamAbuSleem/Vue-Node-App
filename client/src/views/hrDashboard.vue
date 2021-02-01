@@ -60,7 +60,7 @@
         >
           <template v-slot:expanded-item="{ headers, item }">
             <td :colspan="headers.length" class="text-xs-right">
-              <v-icon
+              <v-icon v-if="this.userInfo.role=='Manager'"
                 color="grey darken-2"
                 class="edit-icon"
                 @click="editUser(item)"
@@ -115,6 +115,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import getUsers from "../services/userOperations";
 import editUser from "../components/editUser";
 import getDayOff from "../services/dayOffoperations";
@@ -149,6 +150,8 @@ export default {
     getUsers.getAllUsers().then((res) => {
       this.items = res.data;
     });
+  },computed: {
+    ...mapGetters(['userInfo'])
   },
   methods: {
     clicked(value) {

@@ -1,15 +1,6 @@
 <template>
     <div dir="rtl">
 
-<v-btn color="success"><download-excel
-  class="btn btn-default"
-  :data="json_data"
-  :fields="json_fields"
-  worksheet="My Worksheet"
-  :name="formatDate"
->
-  Download Excel
-</download-excel></v-btn>
 
 
         <v-row class="">
@@ -134,12 +125,15 @@ export default {
 
     },watch:{
        filterAccepted :function(){
-           setTimeout(()=>{
-               this.filterAccepted.forEach((item)=>{
-                   this.accept(item._id,item)
-               })
+         var offset = 0;
+             this.filterAccepted.forEach((item)=>{
+                      setTimeout(()=>{
+              this.accept(item._id,item)
                console.log("done ... ")
-           },7200000 )
+           },3600000 + offset)
+           offset += 3600000;
+               })
+  
         }
     },
     created() {
