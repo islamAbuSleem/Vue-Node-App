@@ -48,6 +48,11 @@ const actions = {
         }
         commit('setToken', state.userInfo._id);
     },
+    async updateUserInfo({ commit }, userId) {
+        await authService.updateUserInfo(userId).then((res) => {
+            commit('setUserInfo', res.data[0])
+        })
+    },
     logout: ({ commit }) => {
         commit('setToken', null);
         window.localStorage.removeItem("login_token");
@@ -59,16 +64,7 @@ const actions = {
         EzenService.registerEzen(credentials).then(res => {
             commit('setResponse', res)
         })
-    },
-    // // eslint-disable-next-line no-unused-vars
-    // upateCount: ({ commit }, dayoff) => {
-    //     updateOffCount.updateDayOffCount(state.userInfo.userId, state.userInfo).then(res => {
-    //         commit('setUserInfo', res.data)
-
-    //         console.log(res.data)
-
-    //     })
-    // }
+    }
 
 }
 

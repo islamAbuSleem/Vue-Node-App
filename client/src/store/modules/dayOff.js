@@ -11,9 +11,21 @@ const getters = {
 }
 
 const actions = {
-    send: ({ commit }, credentials) => {
+    send: ({ rootState, commit }, credentials) => {
 
         authService.registerDayOff(credentials).then(res => {
+            console.log(res)
+            if (rootState.user.userInfo.role == "Manager") {
+                if (res.data.offType == rootState.user.items[0]) {
+                    rootState.user.userInfo.normal = +rootState.user.userInfo.normal - +res.data.period;
+                } else if (res.data.offType == rootState.user.items[1]) {
+                    rootState.user.userInfo.urgent = +rootState.user.userInfo.urgent - +res.data.period;
+                } else if (res.data.offType == rootState.user.items[2]) {
+                    rootState.user.userInfo.quarterDay = 0;
+                }
+                authService.updateDayOffCount(rootState.user.userInfo.userId, rootState.user.userInfo)
+            }
+
             commit('setResponse', res)
         })
         if (state.response == '') {

@@ -2,13 +2,10 @@ const User = require('../../models/user');
 const bcrypt = require('bcrypt');
 const helper = require('../../helper/functions');
 const jwt = require('jsonwebtoken');
-const router = require('..');
 
 const saltRounds = 10;
 
 module.exports = function(router) {
-
-
     router.get('/user/:userId', function(req, res, next) {
         User.findById(req.params.userId).exec()
             .then(docs => res.status(200)
@@ -32,28 +29,30 @@ module.exports = function(router) {
 
     })
     router.get('/user/userId/:userId', function(req, res) {
-            User.find({ 'userId': req.params.userId }).exec()
-                .then(docs => res.status(200)
-                    .json(docs))
-                .catch(err => res.status(500)
-                    .json({
-                        message: 'error finding user',
-                        error: err
-                    }))
-        })
-        // router.post('/user/email/:email', function(req, res) {
-        //     User.find({ 'email': req.params.email }).exec()
-        //         .then(docs => {
-        //             res.status(200)
-        //                 .json(docs)
-        //             console.log(req.body)
-        //         })
-        //         .catch(err => res.status(500)
-        //             .json({
-        //                 message: 'error finding user',
-        //                 error: err
-        //             }))
-        // })
+        User.find({ 'userId': req.params.userId }).exec()
+            .then(docs => res.status(200)
+                .json(docs))
+            .catch(err => res.status(500)
+                .json({
+                    message: 'error finding user',
+                    error: err
+                }))
+    })
+
+    router.post('/user/userId/', async(req, res) => {
+        await User.find({ "userId": req.body.userId }).exec()
+            .then(docs => {
+                console.log(req.body.userId)
+                console.log(docs)
+                res.status(200)
+                    .json(docs)
+            })
+            .catch(err => res.status(500)
+                .json({
+                    message: 'error finding user',
+                    error: err
+                }))
+    })
 
     router.post('/user/login/', async(req, res) => {
         const { email, password } = req.body
@@ -134,7 +133,5 @@ module.exports = function(router) {
             })
         })
     })
-    router.route('/hr-dashboard').get((req, res, next) => {
-        res.redirect('/')
-    })
+
 }

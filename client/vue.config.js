@@ -1,5 +1,11 @@
-module.exports = {
-  "transpileDependencies": [
-    "vuetify"
-  ]
+const path = require('path')
+module.export = {
+    outputDir: path.resolve(__dirname, '../server/public'),
+    devServer: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8081'
+            }
+        }
+    }
 }

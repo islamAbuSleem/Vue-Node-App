@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container >
     <v-row>
       <v-col cols="12" sm="3">
         <v-card elevation="3" outlined class="text-center urgent">
@@ -77,7 +77,7 @@
       <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0 ; mangerAccept()" v-if="userInfo.role == 'Manager'">
        موافقه
       </v-btn>
-      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0 ; topMangerAccept()" v-if="userInfo.role == 'Top Manager'">
+      <v-btn class="mx-1 ml-auto" color="error" @click="messages = 0 ; topMangerAccept()" v-if="userInfo.role == 'Manager' && userInfo.dept=='Sector'">
        موافقه
       </v-btn>
       <v-btn class="mx-1 ml-auto" color="primary" @click="messages = 0 ;hrList()" v-if="userInfo.team == 'Hr'">
@@ -91,28 +91,31 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters , mapActions} from "vuex";
 import {renewDayOff} from '../mixins/renewDayOff'
 import getDayOff from '../services/dayOffoperations';
-import getUser from '../services/userOperations'
 
 export default {
   mixins:[renewDayOff],
   data() {
     return {
        now: new Date(),
+       x:null,
+       y:null
     };
   },
-  created() {
-        // this.updateUserData()
+   created() {
+    this.updateUserInfo(this.userInfo.userId)
     this.quarterDayRenew()
+
     this.annualDayOffRenew()
-    this.calculateDayoffCount()
+  },beforeUpdate(){
   },
   computed: {
     ...mapGetters(["userInfo"]),
   },
   methods:{
+    ...mapActions(["updateUserInfo"]),
     hrList(){
       this.$router.push({name: 'hr-list'})
     },
@@ -146,12 +149,14 @@ export default {
          console.log('annual renewal !!!')
          this.renewalCount()
         }
+        if(this.userInfo.normal == null || this.userInfo.urgent == null){
+          this.calculateDayoffCount()
+        }
+
     },renewalCount(){
           this.userInfo.normal = this.userInfo.annualNormal;
           this.userInfo.urgent = this.userInfo.annualUrgent;
-           getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo).then(res => {
-                this.$store.commit("setUserInfo", res.data)
-            })
+           getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo)
     },
     calculateDayoffCount(){
 
@@ -165,16 +170,12 @@ export default {
         this.userInfo.normal = ''
         this.userInfo.urgent = ''
             console.log('no renewal !!!')
-            getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo).then(res => {
-                console.log(res)
-                this.$store.commit("setUserInfo", this.userInfo)
-            })
+            getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo)
       }else{
         if((new Date(this.now).getMonth() + 1) == 1){
           if(!(+this.userInfo.normal + +this.userInfo.urgent)){
          console.log('full renewal !!!')
 
-            console.log((+this.userInfo.normal + +this.userInfo.urgent))
             this.renewalCount()
           }
         }else{
@@ -182,22 +183,12 @@ export default {
             console.log('custome renewal !!!')
             this.userInfo.normal = Math.floor(normalPerMonth  * yearRemainingDays)
             this.userInfo.urgent = Math.floor(urgentPerMonth * yearRemainingDays)
-            getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo).then(res => {
-              console.log(res)
-              this.$store.commit("setUserInfo", this.userInfo)
-            })
+            getDayOff.updateDayOffCount(this.userInfo.userId,this.userInfo)
           }
         }
       }
     },
-    updateUserData(){
-      console.log(this.userInfo.userId)
-      getUser.getUser(this.userInfo.userId).then((res) => {
-        console.log(res)
-        this.$store.commit("setUserInfo", this.userInfo)
-      })
     }
-  }
 };
 </script>
 

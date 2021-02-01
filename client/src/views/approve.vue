@@ -106,16 +106,17 @@ export default {
     accept(id, user) {
       user.status = "accepted by manager";
       user.manager = `accepted by ${this.userInfo.name}`;
-
+      //update status
       getDayOff.updateDayOffStatus(id, user);
 
-      if (user.offType == this.items[0]) {
-        this.userData.normal = +this.userData.normal - +user.period;
-      } else if (user.offType == this.items[1]) {
-        this.userData.urgent = +this.userData.urgent - +user.period;
-      } else if (user.offType == this.items[2]) {
-        this.userData.quarterDay = 0;
-      }
+
+      // if (user.offType == this.items[0]) {
+      //   this.userData.normal = +this.userData.normal - +user.period;
+      // } else if (user.offType == this.items[1]) {
+      //   this.userData.urgent = +this.userData.urgent - +user.period;
+      // } else if (user.offType == this.items[2]) {
+      //   this.userData.quarterDay = 0;
+      // }
 
       getUser.getUser(user.userId).then((res) => {
         this.userData = res.data[0];
